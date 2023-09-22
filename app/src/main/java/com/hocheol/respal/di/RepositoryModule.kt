@@ -15,6 +15,6 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideMainRepository(
-        githubApi: SampleApi
-    ) = MainRepository(githubApi)
+        sampleApi: SampleApi
+    ) = MainRepository(sampleApi)
 }

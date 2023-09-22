@@ -4,7 +4,8 @@ import com.hocheol.respal.data.remote.api.SampleApi
 import javax.inject.Inject
 
 class MainRepository @Inject constructor(
-    private val githubApi: SampleApi
+    private val sampleApi: SampleApi
 ){
-    fun getUserInfo(owner : String) = githubApi.getRepos(owner)
+    fun getUserInfo(owner : String) = sampleApi.getRepos(owner)
+    fun getReposNotRX(owner : String) = sampleApi.getReposNotRX(owner)
 }

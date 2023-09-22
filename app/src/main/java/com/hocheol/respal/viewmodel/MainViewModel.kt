@@ -1,20 +1,17 @@
 package com.hocheol.respal.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.schedulers.Schedulers.io
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     fun getUserInfo(owner: String) = mainRepository.getUserInfo(owner)
         .subscribeOn(Schedulers.io())
@@ -24,5 +21,17 @@ class MainViewModel @Inject constructor(
         }, { e ->
             println(e.toString())
         })
+
+    // RX를 사용하지 않고 coroutine을 사용하는 예시이지만 아직 안됨
+    fun getUserInfo1(owner: String) {
+        try {
+            val items = mainRepository.getReposNotRX(owner)
+            for (item in items) {
+                println(item)
+            }
+        } catch (e: Exception) {
+            println(e.toString())
+        }
+    }
 
 }
