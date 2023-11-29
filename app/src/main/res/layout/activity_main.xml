@@ -9,7 +9,12 @@
             type="com.hocheol.respal.view.MainActivity" />
     </data>
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+<!--    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".view.MainActivity"
@@ -36,5 +41,5 @@
             android:layout_height="match_parent"
             app:layout_constraintTop_toTopOf="@+id/search"/>
 
-    </LinearLayout>
+    </LinearLayout>-->
 </layout>

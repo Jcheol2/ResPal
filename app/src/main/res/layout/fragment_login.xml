@@ -48,16 +48,19 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/github_login_btn"
                 android:src="@drawable/github_ic"
                 android:scaleType="fitCenter"
                 android:layout_width="100dp"
                 android:layout_height="50dp"/>
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/google_login_btn"
                 android:src="@drawable/google_ic"
                 android:scaleType="fitCenter"
                 android:layout_width="100dp"
                 android:layout_height="50dp"/>
             <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/kakao_login_btn"
                 android:src="@drawable/kakao_ic"
                 android:scaleType="fitCenter"
                 android:layout_width="100dp"

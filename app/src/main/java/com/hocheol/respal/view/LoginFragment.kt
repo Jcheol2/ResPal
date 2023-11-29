@@ -24,6 +24,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     override fun init() {
         //mainViewModel.getUserInfo1("Jcheol2")
         Log.e("TEST", viewModel.test())
-
+        binding.googleLoginBtn.setOnClickListener {
+            mainViewModel.getUserInfo("Jcheol2")
+        }
     }
 }

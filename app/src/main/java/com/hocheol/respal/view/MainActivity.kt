@@ -16,15 +16,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     // onCreate는 BaseActivity에서 정의했으므로 init이 거의 onCreate인 셈임..
     override fun init() {
         binding.activity = this
-    }
-
-    fun clickSearchBtn(view: View){
-        shortShowToast("Toast Test")
-        mainViewModel.getUserInfo(binding.name.text.toString())
-
         supportFragmentManager.beginTransaction()
             .add(R.id.frame_layout, LoginFragment(), "LOGIN_FRAGMENT_TAG")
             .addToBackStack(null)
             .commitAllowingStateLoss()
     }
+
+//    fun clickSearchBtn(view: View){
+//        shortShowToast("Toast Test")
+//        mainViewModel.getUserInfo(binding.name.text.toString())
+//
+//        supportFragmentManager.beginTransaction()
+//            .add(R.id.frame_layout, LoginFragment(), "LOGIN_FRAGMENT_TAG")
+//            .addToBackStack(null)
+//            .commitAllowingStateLoss()
+//    }
 }
