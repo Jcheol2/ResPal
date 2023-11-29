@@ -1,6 +1,6 @@
 package com.hocheol.respal.di
 
-import com.hocheol.respal.data.remote.api.SampleApi
+import com.hocheol.respal.data.remote.api.RespalApi
 import com.hocheol.respal.widget.utils.Utils.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -57,7 +57,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideGithubApiService(retrofit: Retrofit): SampleApi {
-        return retrofit.create(SampleApi::class.java)
+    fun provideGithubApiService(retrofit: Retrofit): RespalApi {
+        return retrofit.create(RespalApi::class.java)
     }
 }
