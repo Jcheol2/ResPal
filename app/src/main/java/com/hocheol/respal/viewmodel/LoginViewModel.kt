@@ -2,6 +2,7 @@ package com.hocheol.respal.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,6 +62,8 @@ class LoginViewModel @Inject constructor(
             .appendQueryParameter("response_type", "code")
             .appendQueryParameter("scope", scopes.joinToString(" "))
             .build()
+
+        Log.d("TEST", authUrl.path.toString())
 
 //        // 웹뷰를 통해 로그인 페이지 열기
 //        val result = FlutterWebAuth.authenticate(

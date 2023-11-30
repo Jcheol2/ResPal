@@ -4,156 +4,167 @@
     android:clickable="true"
     android:background="@color/white">
 
-    <LinearLayout
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:src="@drawable/app_icon"
-            android:layout_marginTop="30dp"
-            android:layout_width="90dp"
-            android:layout_height="120dp"/>
-
-        <TextView
-            android:text="Respal에 오신것을 환영합니다."
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:text="Respal은 개발자를 위한 이력서 공유 플랫폼입니다."
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_marginTop="50dp"
-            android:text="SNS 로그인"
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
         <LinearLayout
-            android:layout_marginTop="10dp"
             android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/github_login_btn"
-                android:src="@drawable/github_ic"
-                android:scaleType="fitCenter"
-                android:layout_width="100dp"
-                android:layout_height="50dp"/>
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/google_login_btn"
-                android:src="@drawable/google_ic"
-                android:scaleType="fitCenter"
-                android:layout_width="100dp"
-                android:layout_height="50dp"/>
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/kakao_login_btn"
-                android:src="@drawable/kakao_ic"
-                android:scaleType="fitCenter"
-                android:layout_width="100dp"
-                android:layout_height="50dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_marginTop="20dp"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <View
-                android:layout_weight="1"
-                android:layout_width="100dp"
-                android:layout_height="0.75dp"
-                android:background="@color/black"/>
-            <TextView
-                android:layout_weight="1"
-                android:text="Respal 아이디로 로그인"
-                android:gravity="center_vertical"
-                android:textAlignment="center"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                tools:ignore="RtlCompat" />
-
-            <View
-                android:layout_weight="1"
-                android:layout_width="100dp"
-                android:layout_height="0.75dp"
-                android:background="@color/black"/>
-        </LinearLayout>
-
-        <TextView
-            android:layout_marginTop="20dp"
-            android:text="아이디"
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_marginTop="20dp"
-            android:text="비밀번호"
-            android:textSize="12sp"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_marginTop="20dp"
-            android:text="계정찾기"
-            android:textColor="@color/purple_500"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:text="로그인"
-            android:textColor="@color/white"
-            android:layout_marginTop="10dp"
-            android:background="@color/black"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <ImageView
+                android:src="@drawable/app_icon"
+                android:layout_marginTop="30dp"
+                android:layout_width="90dp"
+                android:layout_height="120dp"/>
 
             <TextView
-                android:text="아직 회원이 아니신가요?"
+                android:text="Respal에 오신것을 환영합니다."
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
-                android:text="회원가입"
-                android:layout_marginStart="20dp"
+                android:text="Respal은 개발자를 위한 이력서 공유 플랫폼입니다."
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="50dp"
+                android:text="SNS 로그인"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/github_login_btn"
+                    android:src="@drawable/github_ic"
+                    android:scaleType="fitCenter"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"/>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/google_login_btn"
+                    android:src="@drawable/google_ic"
+                    android:scaleType="fitCenter"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"/>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/kakao_login_btn"
+                    android:src="@drawable/kakao_ic"
+                    android:scaleType="fitCenter"
+                    android:layout_width="100dp"
+                    android:layout_height="50dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="100dp"
+                    android:layout_height="0.75dp"
+                    android:background="@color/black"/>
+                <TextView
+                    android:layout_weight="1"
+                    android:text="Respal 아이디로 로그인"
+                    android:gravity="center_vertical"
+                    android:textAlignment="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    tools:ignore="RtlCompat" />
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="100dp"
+                    android:layout_height="0.75dp"
+                    android:background="@color/black"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="아이디"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="비밀번호"
+                android:textSize="12sp"
+                android:textColor="@color/black"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:layout_marginTop="20dp"
+                android:text="계정찾기"
                 android:textColor="@color/purple_500"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:text="로그인"
+                android:textColor="@color/white"
+                android:layout_marginTop="10dp"
+                android:background="@color/black"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="아직 회원이 아니신가요?"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="회원가입"
+                    android:layout_marginStart="20dp"
+                    android:textColor="@color/purple_500"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
+        <WebView
+            android:id="@+id/web_view_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+    </RelativeLayout>
 </layout>
