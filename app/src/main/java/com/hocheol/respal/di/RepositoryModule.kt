@@ -1,6 +1,6 @@
 package com.hocheol.respal.di
 
-import com.hocheol.respal.data.remote.api.SampleApi
+import com.hocheol.respal.data.remote.api.RespalApi
 import com.hocheol.respal.repository.MainRepository
 import dagger.Module
 import dagger.Provides
@@ -15,6 +15,6 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideMainRepository(
-        sampleApi: SampleApi
-    ) = MainRepository(sampleApi)
+        respalApi: RespalApi
+    ) = MainRepository(respalApi)
 }

@@ -1,13 +1,5 @@
 package com.hocheol.respal.view
 
-import androidx.lifecycle.ViewModelProvider
-import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseFragment
@@ -18,14 +10,20 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
+    private var TAG = this.javaClass.simpleName
+
     private val mainViewModel by viewModels<MainViewModel>()
     private val viewModel by viewModels<LoginViewModel>()
 
     override fun init() {
-        //mainViewModel.getUserInfo1("Jcheol2")
+        binding.githubLoginBtn.setOnClickListener {
+            viewModel.signInOauth(requireContext(), "github")
+        }
         binding.googleLoginBtn.setOnClickListener {
-//            mainViewModel.getUserInfo("Jcheol2")
             viewModel.signInOauth(requireContext(), "google")
+        }
+        binding.kakaoLoginBtn.setOnClickListener {
+            viewModel.signInOauth(requireContext(), "kakao")
         }
     }
 }

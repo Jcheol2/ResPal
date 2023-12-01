@@ -3,6 +3,11 @@ package com.hocheol.respal.viewmodel
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +18,9 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : BaseViewModel() {
+
+    private val _webViewPath = MutableLiveData<String?>()
+    val webViewPath: LiveData<String?> get() = _webViewPath
 
 //    fun getUserInfo(owner: String) = mainRepository.getUserInfo(owner)
 //        .subscribeOn(Schedulers.io())
@@ -55,15 +63,46 @@ class LoginViewModel @Inject constructor(
             else -> return
         }
 
-        // 로그인 요청 URL 생성
-        val authUrl = Uri.parse(loginUrl).buildUpon()
+//        setWebView(loginUrl)
+
+//        val authUrl = Uri.parse("https://accounts.google.com/o/oauth2/auth").buildUpon()
+//            .appendQueryParameter("client_id", clientId)
+//            .appendQueryParameter("redirect_uri", redirectUri)
+//            .appendQueryParameter("response_type", "code")
+//            .appendQueryParameter("scope", scopes.joinToString(" "))
+//            .build()
+
+        val authUrl = Uri.parse(loginUrl)
+            .buildUpon()
+            .clearQuery()
             .appendQueryParameter("client_id", clientId)
             .appendQueryParameter("redirect_uri", redirectUri)
             .appendQueryParameter("response_type", "code")
             .appendQueryParameter("scope", scopes.joinToString(" "))
             .build()
 
-        Log.d("TEST", authUrl.path.toString())
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .setShowTitle(true)
+            .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
+            .build()
+
+        //1번
+//        customTabsIntent.launchUrl(context, authUrl)
+
+        //2번
+        customTabsIntent.intent.setData(authUrl);
+        context.startActivity(customTabsIntent.intent, customTabsIntent.startAnimationBundle);
+
+//        // 로그인 요청 URL 생성
+//        val authUrl = Uri.parse(loginUrl).buildUpon()
+//            .appendQueryParameter("client_id", clientId)
+//            .appendQueryParameter("redirect_uri", redirectUri)
+//            .appendQueryParameter("response_type", "code")
+//            .appendQueryParameter("scope", scopes.joinToString(" "))
+//            .build()
+//
+//        Log.d("TEST", authUrl.path.toString())
+
 
 //        // 웹뷰를 통해 로그인 페이지 열기
 //        val result = FlutterWebAuth.authenticate(
@@ -88,5 +127,9 @@ class LoginViewModel @Inject constructor(
 //        }
 
 //        sendOauthToBackend(context, type, code)
+    }
+
+    fun setWebView(path: String?) {
+        _webViewPath.postValue(path)
     }
 }

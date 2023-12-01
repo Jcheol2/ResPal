@@ -1,13 +1,11 @@
 package com.hocheol.respal.view
 
-import android.view.View
 import androidx.activity.viewModels
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseActivity
 import com.hocheol.respal.databinding.ActivityMainBinding
 import com.hocheol.respal.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
@@ -21,14 +19,4 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             .addToBackStack(null)
             .commitAllowingStateLoss()
     }
-
-//    fun clickSearchBtn(view: View){
-//        shortShowToast("Toast Test")
-//        mainViewModel.getUserInfo(binding.name.text.toString())
-//
-//        supportFragmentManager.beginTransaction()
-//            .add(R.id.frame_layout, LoginFragment(), "LOGIN_FRAGMENT_TAG")
-//            .addToBackStack(null)
-//            .commitAllowingStateLoss()
-//    }
 }
