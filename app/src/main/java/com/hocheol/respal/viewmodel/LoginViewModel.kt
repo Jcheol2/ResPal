@@ -12,6 +12,7 @@ import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.schedulers.Schedulers
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,6 +47,7 @@ class LoginViewModel @Inject constructor(
                 redirectUri = "http://api-respal.me/oauth/app/login/kakao"
                 loginUrl = "https://kauth.kakao.com/oauth/authorize?" +
                         "client_id=6dee52527ff692975e9b7b8596ad76b5&redirect_uri=http://api-respal.me/oauth/app/login/kakao&response_type=code"
+                scopes = listOf("")
             }
             platform.contains("google") -> {
                 clientId = "900804701090-sk6rt9ah5cp1tmg6ppudj48ki2hs29co.apps.googleusercontent.com"
@@ -59,72 +61,53 @@ class LoginViewModel @Inject constructor(
                 redirectUri = "http://api-respal.me/oauth/app/login/github"
                 loginUrl = "https://github.com/login/oauth/authorize?" +
                         "client_id=Iv1.dbc970eb37f92943&redirect_uri=http://api-respal.me/oauth/app/login/github"
+                scopes = listOf("")
             }
             else -> return
         }
 
 //        setWebView(loginUrl)
+        val authUrl: Uri
+        if (scopes.isNotEmpty()) {
+            authUrl = Uri.parse(loginUrl)
+                .buildUpon()
+                .clearQuery()
+                .appendQueryParameter("client_id", clientId)
+                .appendQueryParameter("redirect_uri", redirectUri)
+                .appendQueryParameter("response_type", "code")
+                .appendQueryParameter("scope", scopes.joinToString(" "))
+                .build()
+        } else {
+            authUrl = Uri.parse(loginUrl)
+                .buildUpon()
+                .clearQuery()
+                .appendQueryParameter("client_id", clientId)
+                .appendQueryParameter("redirect_uri", redirectUri)
+                .appendQueryParameter("response_type", "code")
+                .appendQueryParameter("scope", scopes.joinToString(""))
+                .build()
+        }
 
-//        val authUrl = Uri.parse("https://accounts.google.com/o/oauth2/auth").buildUpon()
-//            .appendQueryParameter("client_id", clientId)
-//            .appendQueryParameter("redirect_uri", redirectUri)
-//            .appendQueryParameter("response_type", "code")
-//            .appendQueryParameter("scope", scopes.joinToString(" "))
-//            .build()
+        try {
+            val customTabsIntent = CustomTabsIntent.Builder()
+                .setShowTitle(true)
+                .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
+                .build()
 
-        val authUrl = Uri.parse(loginUrl)
-            .buildUpon()
-            .clearQuery()
-            .appendQueryParameter("client_id", clientId)
-            .appendQueryParameter("redirect_uri", redirectUri)
-            .appendQueryParameter("response_type", "code")
-            .appendQueryParameter("scope", scopes.joinToString(" "))
-            .build()
-
-        val customTabsIntent = CustomTabsIntent.Builder()
-            .setShowTitle(true)
-            .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
-            .build()
-
-        //1번
+            //1번
 //        customTabsIntent.launchUrl(context, authUrl)
 
-        //2번
-        customTabsIntent.intent.setData(authUrl);
-        context.startActivity(customTabsIntent.intent, customTabsIntent.startAnimationBundle);
+            Log.d("정철", "authUrl: $authUrl")
+            Log.d("정철", "Scheme: ${authUrl.scheme}")
+            Log.d("정철", "Host: ${authUrl.host}")
 
-//        // 로그인 요청 URL 생성
-//        val authUrl = Uri.parse(loginUrl).buildUpon()
-//            .appendQueryParameter("client_id", clientId)
-//            .appendQueryParameter("redirect_uri", redirectUri)
-//            .appendQueryParameter("response_type", "code")
-//            .appendQueryParameter("scope", scopes.joinToString(" "))
-//            .build()
-//
-//        Log.d("TEST", authUrl.path.toString())
+            //2번
+            customTabsIntent.intent.setData(authUrl)
+            context.startActivity(customTabsIntent.intent, customTabsIntent.startAnimationBundle)
+        } catch (e: Exception) {
+            Log.d("정철", "error: $e")
+        }
 
-
-//        // 웹뷰를 통해 로그인 페이지 열기
-//        val result = FlutterWebAuth.authenticate(
-//                    context,
-//            authUrl.toString(),
-//            urlScheme
-//        )
-//
-//        // 콜백 데이터 처리
-//        val uri = Uri.parse(result)
-//        val prefix = "app://"
-//        val path = result.substring(prefix.length)
-//        val code = uri.getQueryParameter("uid")
-//
-//        type = if (path.startsWith("signup")) {
-//            "signup"
-//        } else if (path.startsWith("callback")) {
-//            "callback"
-//        } else {
-//            print("에러")
-//            return
-//        }
 
 //        sendOauthToBackend(context, type, code)
     }
