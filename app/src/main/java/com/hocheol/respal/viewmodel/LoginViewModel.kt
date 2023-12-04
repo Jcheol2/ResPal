@@ -11,15 +11,13 @@ import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.schedulers.Schedulers
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : BaseViewModel() {
-
+    private val TAG = this.javaClass.simpleName
     private val _webViewPath = MutableLiveData<String?>()
     val webViewPath: LiveData<String?> get() = _webViewPath
 
@@ -33,86 +31,53 @@ class LoginViewModel @Inject constructor(
 //        })
 
     fun signInOauth(context: Context, platform: String) {
-        // 로그인에 필요한 파라미터 설정
-        var clientId = ""
-        var redirectUri = ""
-        var loginUrl = ""
+        val loginUrl: String
+        val clientId: String
+        val redirectUri: String
         var scopes = listOf<String>()
-        val urlScheme = "app"
-        var type = ""
 
         when {
             platform.contains("kakao") -> {
+                loginUrl = "https://kauth.kakao.com/oauth/authorize?"
                 clientId = "6dee52527ff692975e9b7b8596ad76b5"
                 redirectUri = "http://api-respal.me/oauth/app/login/kakao"
-                loginUrl = "https://kauth.kakao.com/oauth/authorize?" +
-                        "client_id=6dee52527ff692975e9b7b8596ad76b5&redirect_uri=http://api-respal.me/oauth/app/login/kakao&response_type=code"
-                scopes = listOf("")
             }
             platform.contains("google") -> {
+                loginUrl = "https://accounts.google.com/o/oauth2/auth?"
                 clientId = "900804701090-sk6rt9ah5cp1tmg6ppudj48ki2hs29co.apps.googleusercontent.com"
                 redirectUri = "http://api-respal.me/oauth/app/login/google"
-                loginUrl = "https://accounts.google.com/o/oauth2/auth?" +
-                        "client_id=900804701090-sk6rt9ah5cp1tmg6ppudj48ki2hs29co.apps.googleusercontent.com&redirect_uri=http://api-respal.me/oauth/app/login/google&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-                scopes = listOf("email", "profile")
+                scopes = listOf("https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile")
+
             }
             platform.contains("github") -> {
+                loginUrl = "https://github.com/login/oauth/authorize?"
                 clientId = "Iv1.dbc970eb37f92943"
                 redirectUri = "http://api-respal.me/oauth/app/login/github"
-                loginUrl = "https://github.com/login/oauth/authorize?" +
-                        "client_id=Iv1.dbc970eb37f92943&redirect_uri=http://api-respal.me/oauth/app/login/github"
-                scopes = listOf("")
             }
             else -> return
         }
+        val authUrl: Uri = Uri.parse(loginUrl)
+            .buildUpon()
+            .appendQueryParameter("client_id", clientId)
+            .appendQueryParameter("redirect_uri", redirectUri)
+            .appendQueryParameter("response_type", "code")
+            .appendQueryParameter("scope", scopes.joinToString(" "))
+            .build()
 
-//        setWebView(loginUrl)
-        val authUrl: Uri
-        if (scopes.isNotEmpty()) {
-            authUrl = Uri.parse(loginUrl)
-                .buildUpon()
-                .clearQuery()
-                .appendQueryParameter("client_id", clientId)
-                .appendQueryParameter("redirect_uri", redirectUri)
-                .appendQueryParameter("response_type", "code")
-                .appendQueryParameter("scope", scopes.joinToString(" "))
-                .build()
-        } else {
-            authUrl = Uri.parse(loginUrl)
-                .buildUpon()
-                .clearQuery()
-                .appendQueryParameter("client_id", clientId)
-                .appendQueryParameter("redirect_uri", redirectUri)
-                .appendQueryParameter("response_type", "code")
-                .appendQueryParameter("scope", scopes.joinToString(""))
-                .build()
-        }
+        Log.d(TAG, "authUrl: $authUrl")
 
         try {
             val customTabsIntent = CustomTabsIntent.Builder()
-                .setShowTitle(true)
+                .setShowTitle(false)
                 .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
                 .build()
+            customTabsIntent.intent.data = authUrl
 
-            //1번
-//        customTabsIntent.launchUrl(context, authUrl)
-
-            Log.d("정철", "authUrl: $authUrl")
-            Log.d("정철", "Scheme: ${authUrl.scheme}")
-            Log.d("정철", "Host: ${authUrl.host}")
-
-            //2번
-            customTabsIntent.intent.setData(authUrl)
             context.startActivity(customTabsIntent.intent, customTabsIntent.startAnimationBundle)
         } catch (e: Exception) {
-            Log.d("정철", "error: $e")
+            Log.d(TAG, "error: $e")
         }
 
-
 //        sendOauthToBackend(context, type, code)
-    }
-
-    fun setWebView(path: String?) {
-        _webViewPath.postValue(path)
     }
 }
