@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseActivity
 import com.hocheol.respal.databinding.ActivityMainBinding
+import com.hocheol.respal.viewmodel.LoginViewModel
 import com.hocheol.respal.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -13,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val TAG = this.javaClass.simpleName
     private val mainViewModel by viewModels<MainViewModel>() // by viewModels()을 사용하여 Hilt가 생성한 ViewModel 인스턴스를 획득
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     // onCreate는 BaseActivity에서 정의했으므로 init이 거의 onCreate인 셈
     override fun init() {
@@ -44,10 +46,12 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 Log.d(TAG, type)
                 Log.d(TAG, code.toString())
                 longShowToast("$type, $code")
+                loginViewModel.sendOauthToBackend(code!!, type)
             }
         }
     }
 
+    // Github, Kakao Callback
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         Log.d(TAG, "여기들어옴")
@@ -68,6 +72,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             Log.d(TAG, type)
             Log.d(TAG, code.toString())
             longShowToast("$type, $code")
+            loginViewModel.sendOauthToBackend(code!!, type)
         }
     }
 

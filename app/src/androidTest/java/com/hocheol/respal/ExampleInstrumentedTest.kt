@@ -2,11 +2,13 @@ package com.hocheol.respal
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.hocheol.respal.repository.MainRepository
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
+import javax.inject.Inject
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -14,10 +16,20 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 @RunWith(AndroidJUnit4::class)
-class ExampleInstrumentedTest {
+class ExampleInstrumentedTest @Inject constructor(
+    private val mainRepository: MainRepository
+)
+{
     @Test
     fun useAppContext() {
         // Context of the app under test.
+        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+        assertEquals("com.hocheol.respal", appContext.packageName)
+    }
+
+    @Test
+    fun serverResponseCheck() {
+        mainRepository.test()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.hocheol.respal", appContext.packageName)
     }

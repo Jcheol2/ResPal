@@ -11,6 +11,7 @@ import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,19 +41,19 @@ class LoginViewModel @Inject constructor(
             platform.contains("kakao") -> {
                 loginUrl = "https://kauth.kakao.com/oauth/authorize?"
                 clientId = "6dee52527ff692975e9b7b8596ad76b5"
-                redirectUri = "http://api-respal.me/oauth/app/login/kakao"
+                redirectUri = "https://api.respal.me/oauth/app/login/kakao"
             }
             platform.contains("google") -> {
                 loginUrl = "https://accounts.google.com/o/oauth2/auth?"
                 clientId = "900804701090-sk6rt9ah5cp1tmg6ppudj48ki2hs29co.apps.googleusercontent.com"
-                redirectUri = "http://api-respal.me/oauth/app/login/google"
+                redirectUri = "https://api.respal.me/oauth/app/login/google"
                 scopes = listOf("https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/userinfo.profile")
 
             }
             platform.contains("github") -> {
                 loginUrl = "https://github.com/login/oauth/authorize?"
                 clientId = "Iv1.dbc970eb37f92943"
-                redirectUri = "http://api-respal.me/oauth/app/login/github"
+                redirectUri = "https://api.respal.me/oauth/app/login/github"
             }
             else -> return
         }
@@ -80,4 +81,13 @@ class LoginViewModel @Inject constructor(
 
 //        sendOauthToBackend(context, type, code)
     }
+
+    fun sendOauthToBackend(code: String, type: String) = mainRepository.sendOauthInfo(code, type)
+        .subscribeOn(Schedulers.io())
+        .observeOn(Schedulers.io())
+        .subscribe({ items ->
+            items.forEach { println(it) }
+        }, { e ->
+            println(e.toString())
+        })
 }

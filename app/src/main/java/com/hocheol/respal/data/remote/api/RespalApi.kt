@@ -3,7 +3,6 @@ package com.hocheol.respal.data.remote.api
 import com.hocheol.respal.data.remote.model.SampleResponse
 import io.reactivex.Single
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -13,7 +12,7 @@ interface RespalApi {
 
     /** Oauth 정보를 서버로 보내 이미 회원인지 아닌지 판별 */
     @GET("oauth/user/repos/{code}/?type={type}")
-    fun sendOauthInfo(@Path("code") code: String, type:String) : Single<List<SampleResponse>>
+    fun sendOauthInfo(@Path("code") code: String, @Path("type") type:String) : Single<List<SampleResponse>>
 
     /** 회원가입 */
     @POST("member/join")
