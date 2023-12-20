@@ -2,6 +2,7 @@ package com.hocheol.respal
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.repository.MainRepository
 
 import org.junit.Test
@@ -17,7 +18,8 @@ import javax.inject.Inject
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest @Inject constructor(
-    private val mainRepository: MainRepository
+    private val mainRepository: MainRepository,
+    private val sharedPreferenceStorage: SharedPreferenceStorage
 )
 {
     @Test

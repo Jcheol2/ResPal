@@ -1,5 +1,6 @@
 package com.hocheol.respal.view
 
+import com.hocheol.respal.widget.utils.Contants.LOGIN_FRAGMENT_TAG
 import android.content.Intent
 import android.util.Log
 import androidx.activity.viewModels
@@ -19,11 +20,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     // onCreate는 BaseActivity에서 정의했으므로 init이 거의 onCreate인 셈
     override fun init() {
         binding.activity = this
-        supportFragmentManager.beginTransaction()
-            .add(R.id.frame_layout, LoginFragment(), "LOGIN_FRAGMENT_TAG")
-            .addToBackStack(null)
-            .commitAllowingStateLoss()
-
+        mainViewModel.init(supportFragmentManager)
+        mainViewModel.openFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
         handleIntent(intent)
     }
 
@@ -34,19 +32,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 val prefix = "app://"
                 val path = uri.toString().substring(prefix.length)
                 val code = uri.getQueryParameter("uid")
-
-                val type = if (path.startsWith("signup")) {
-                    "signup"
+                longShowToast("code : $code")
+                if (path.startsWith("signup")) {
+                    code?.let { loginViewModel.sendOauthSignUp(it) }
                 } else if (path.startsWith("callback")) {
-                    "callback"
+                    code?.let { loginViewModel.sendOauthCallBack(it) }
                 } else {
                     print("Oauth error")
                     return
                 }
-                Log.d(TAG, type)
-                Log.d(TAG, code.toString())
-                longShowToast("$type, $code")
-                loginViewModel.sendOauthToBackend(code!!, type)
             }
         }
     }
@@ -54,25 +48,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     // Github, Kakao Callback
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        Log.d(TAG, "여기들어옴")
         intent?.data?.let { uri ->
             Log.d(TAG, "Received URI: $uri")
             val prefix = "app://"
             val path = uri.toString().substring(prefix.length)
             val code = uri.getQueryParameter("uid")
-
-            val type = if (path.startsWith("signup")) {
-                "signup"
+            longShowToast("code : $code")
+            if (path.startsWith("signup")) {
+                code?.let { loginViewModel.sendOauthSignUp(it) }
             } else if (path.startsWith("callback")) {
-                "callback"
+                code?.let { loginViewModel.sendOauthCallBack(it) }
             } else {
-                print("Oauth 에러")
+                print("Oauth error")
                 return
             }
-            Log.d(TAG, type)
-            Log.d(TAG, code.toString())
-            longShowToast("$type, $code")
-            loginViewModel.sendOauthToBackend(code!!, type)
         }
     }
 

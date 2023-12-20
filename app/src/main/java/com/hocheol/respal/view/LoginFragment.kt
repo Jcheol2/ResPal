@@ -1,5 +1,6 @@
 package com.hocheol.respal.view
 
+import com.hocheol.respal.widget.utils.Contants.MY_RESUME_FRAGMENT_TAG
 import androidx.fragment.app.viewModels
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseFragment
@@ -24,6 +25,15 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
         binding.kakaoLoginBtn.setOnClickListener {
             viewModel.signInOauth(requireContext(), "kakao")
+        }
+
+        viewModel.fragmentToReplace.observe(viewLifecycleOwner) {fragment ->
+            if (fragment != null) {
+                activity?.runOnUiThread{
+                    mainViewModel.replaceFragment(fragment, null, MY_RESUME_FRAGMENT_TAG)
+                    viewModel.setFragmentToReplace(null)
+                }
+            }
         }
     }
 }

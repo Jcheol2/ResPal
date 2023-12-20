@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FindAccountViewModel @Inject constructor(
+class MyResumeViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : BaseViewModel() {
     // TODO: Implement the ViewModel

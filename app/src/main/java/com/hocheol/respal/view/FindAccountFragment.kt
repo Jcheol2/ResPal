@@ -6,28 +6,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.hocheol.respal.R
+import com.hocheol.respal.base.BaseFragment
+import com.hocheol.respal.databinding.FragmentLoginBinding
 import com.hocheol.respal.viewmodel.FindAccountViewModel
+import com.hocheol.respal.viewmodel.MainViewModel
+import com.hocheol.respal.viewmodel.MyResumeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class FindAccountFragment : Fragment() {
+@AndroidEntryPoint
+class FindAccountFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_find_account) {
+    private var TAG = this.javaClass.simpleName
 
-    companion object {
-        fun newInstance() = FindAccountFragment()
+    private val mainViewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<FindAccountViewModel>()
+
+    override fun init() {
     }
-
-    private lateinit var viewModel: FindAccountViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View? {
-        return inflater.inflate(R.layout.fragment_find_account, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(FindAccountViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }
