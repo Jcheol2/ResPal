@@ -34,6 +34,8 @@ class LoginViewModel @Inject constructor(
 
     fun setFragmentToReplace(fragment: Fragment?) {
         _fragmentToReplace.postValue(fragment)
+//        _fragmentToReplace.value = fragment
+        Log.d(TAG, "setFragmentToReplace : $fragment")
     }
 
     fun signInOauth(context: Context, platform: String) {
@@ -87,13 +89,12 @@ class LoginViewModel @Inject constructor(
 
     fun sendOauthCallBack(code: String) = mainRepository.sendOauthCallBack(code)
         .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe({ items ->
             // 여기서 액세스토큰 리프레시 토큰 저장 후 ME 화면으로 이동
             println(items)
             sharedPreferenceStorage.saveAccessToken(items.result.accessToken)
             sharedPreferenceStorage.saveRefreshToken(items.result.refreshToken)
-            // 여기서 프래그먼트가 안바뀜 검토 필요
             setFragmentToReplace(MyResumeFragment())
         }, { e ->
             println(e.toString())
@@ -116,7 +117,7 @@ class LoginViewModel @Inject constructor(
                 val json = gson.toJson(requestInput)
                 val requestBody = RequestBody.create(mediaType, json)
 
-                Log.d("정철", "requestInput : $requestInput")
+                Log.d(TAG, "requestInput : $requestInput")
                 signUpOauth(requestBody)
             },
             { error ->
