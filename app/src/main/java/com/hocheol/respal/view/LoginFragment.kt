@@ -1,6 +1,7 @@
 package com.hocheol.respal.view
 
 import android.util.Log
+import android.view.View
 import com.hocheol.respal.widget.utils.Contants.MY_RESUME_FRAGMENT_TAG
 import androidx.fragment.app.viewModels
 import com.hocheol.respal.R
@@ -18,37 +19,40 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     private val viewModel by viewModels<LoginViewModel>()
 
     override fun init() {
-        binding.githubLoginBtn.setOnClickListener {
-            viewModel.signInOauth(requireContext(), "github")
-        }
-        binding.googleLoginBtn.setOnClickListener {
-            viewModel.signInOauth(requireContext(), "google")
-        }
-        binding.kakaoLoginBtn.setOnClickListener {
-            viewModel.signInOauth(requireContext(), "kakao")
-        }
+        binding.githubLoginBtn.setOnClickListener(oauthClickListener)
+        binding.googleLoginBtn.setOnClickListener(oauthClickListener)
+        binding.kakaoLoginBtn.setOnClickListener(oauthClickListener)
 
         viewModel.fragmentToReplace.observe(this) { newFragment ->
             Log.d(TAG, "fragmentToReplace Observe")
             if (newFragment != null) {
                 requireActivity().runOnUiThread{
                     mainViewModel.replaceFragment(newFragment, null, MY_RESUME_FRAGMENT_TAG)
-                    viewModel.setFragmentToReplace(null)
                 }
             }
         }
     }
 
     override fun onResume() {
+        Log.d(TAG, "++ onResume ++")
         super.onResume()
+//        viewModel.fragmentToReplace.observe(viewLifecycleOwner) { newFragment ->
+//            if (newFragment != null) {
+//                requireActivity().runOnUiThread {
+//                    mainViewModel.replaceFragment(newFragment, null, MY_RESUME_FRAGMENT_TAG)
+//                    viewModel.setFragmentToReplace(null)
+//                }
+//            }
+//        }
+    }
 
-        viewModel.fragmentToReplace.observe(viewLifecycleOwner) { newFragment ->
-            if (newFragment != null) {
-                requireActivity().runOnUiThread {
-                    mainViewModel.replaceFragment(newFragment, null, MY_RESUME_FRAGMENT_TAG)
-                    viewModel.setFragmentToReplace(null)
-                }
-            }
+    private val oauthClickListener = View.OnClickListener { view ->
+        val provider = when (view.id) {
+            binding.githubLoginBtn.id -> "github"
+            binding.googleLoginBtn.id -> "google"
+            binding.kakaoLoginBtn.id -> "kakao"
+            else -> return@OnClickListener
         }
+        viewModel.signInOauth(requireContext(), provider)
     }
 }

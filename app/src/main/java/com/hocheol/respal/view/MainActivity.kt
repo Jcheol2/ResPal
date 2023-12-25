@@ -67,11 +67,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     override fun onResume() {
         super.onResume()
-        Log.d(TAG, "++onResume++")
+        Log.d(TAG, "++ onResume ++")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "++onPause++")
+        Log.d(TAG, "++ onPause ++")
     }
 }

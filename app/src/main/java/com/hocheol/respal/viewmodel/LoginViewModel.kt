@@ -7,13 +7,13 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.repository.MainRepository
 import com.hocheol.respal.view.MyResumeFragment
+import com.hocheol.respal.widget.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -29,12 +29,11 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val TAG = this.javaClass.simpleName
 
-    private val _fragmentToReplace = MutableLiveData<Fragment?>()
+    private val _fragmentToReplace = SingleLiveEvent<Fragment?>()
     val fragmentToReplace: LiveData<Fragment?> get() = _fragmentToReplace
 
-    fun setFragmentToReplace(fragment: Fragment?) {
+    private fun setFragmentToReplace(fragment: Fragment?) {
         _fragmentToReplace.postValue(fragment)
-//        _fragmentToReplace.value = fragment
         Log.d(TAG, "setFragmentToReplace : $fragment")
     }
 
