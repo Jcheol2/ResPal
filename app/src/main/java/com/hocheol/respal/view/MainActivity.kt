@@ -1,6 +1,5 @@
 package com.hocheol.respal.view
 
-import com.hocheol.respal.widget.utils.Contants.LOGIN_FRAGMENT_TAG
 import android.content.Intent
 import android.util.Log
 import androidx.activity.viewModels
@@ -9,6 +8,7 @@ import com.hocheol.respal.base.BaseActivity
 import com.hocheol.respal.databinding.ActivityMainBinding
 import com.hocheol.respal.viewmodel.LoginViewModel
 import com.hocheol.respal.viewmodel.MainViewModel
+import com.hocheol.respal.widget.utils.Contants.LOGIN_FRAGMENT_TAG
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

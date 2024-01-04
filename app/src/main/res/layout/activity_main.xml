@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -9,37 +9,60 @@
             type="com.hocheol.respal.view.MainActivity" />
     </data>
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
 
-<!--    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".view.MainActivity"
-        android:orientation="vertical">
-
-        <EditText
-            android:id="@+id/name"
+        <View
+            android:clickable="false"
+            android:background="@color/primary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Github 이름을 입력하세요"
-            android:textSize="20sp" />
+            android:layout_height="40dp"/>
 
-        <Button
-            android:id="@+id/search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="검색하기"
-            android:layout_marginTop="20dp"
-            android:onClick="@{activity::clickSearchBtn}" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/main_toolbar_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="16dp"
+            app:cardBackgroundColor="@color/primary">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/main_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/primary">
+
+                <ImageView
+                    android:id="@+id/toolbar_title_image"
+                    android:layout_width="70dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/toolbar_logo_ic"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="19dp" />
+
+                <TextView
+                    android:id="@+id/setting_btn"
+                    android:text="..."
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="16dp" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+         </com.google.android.material.card.MaterialCardView>
 
         <FrameLayout
             android:id="@+id/frame_layout"
+            android:layout_below="@id/main_toolbar_card_view"
+            android:background="@android:color/white"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="@+id/search"/>
+            android:layout_height="match_parent"/>
 
-    </LinearLayout>-->
+    </RelativeLayout>
+
 </layout>
