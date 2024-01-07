@@ -1,12 +1,18 @@
 package com.hocheol.respal.di
 
+import android.util.Log
+import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.remote.api.RespalApi
+import com.hocheol.respal.data.remote.api.TokenAuthenticator
+import com.hocheol.respal.repository.MainRepository
 import com.hocheol.respal.widget.utils.Contants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -25,7 +31,29 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
+    fun provideHttpClient(
+        sharedPreferenceStorage: SharedPreferenceStorage
+    ): OkHttpClient {
+        val interceptor = Interceptor { chain ->
+            val originalRequest = chain.request()
+            val requestBuilder: Request.Builder = originalRequest.newBuilder()
+            val accessToken = sharedPreferenceStorage.getAccessToken()
+            requestBuilder.addHeader("accept", "application/json")
+            requestBuilder.addHeader("content-type", "application/json")
+            if (!accessToken.isNullOrBlank()) {
+                requestBuilder.addHeader("Authorization", "Bearer $accessToken")
+            }
+            val headers = requestBuilder.build().headers.toString()
+            Log.d("Request Headers", headers)
+
+            val request = requestBuilder.build()
+            Log.d("Request", request.toString()) // 요청 로그 출력
+            chain.proceed(request)
+        }
+//        val tokenAuthenticator = provideTokenAuthenticator(
+//            mainRepository,
+//            sharedPreferenceStorage
+//        )
         return OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
@@ -51,6 +79,8 @@ object NetworkModule {
                     e.printStackTrace()
                 }
             }
+            .addInterceptor(interceptor) // 헤더에 토큰 넣는 로직
+//            .authenticator(tokenAuthenticator) // 토큰 만료 시 새로 받는 로직
             .build()
     }
 
@@ -63,11 +93,19 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            //json 변화기 Factory
-            .client(provideHttpClient())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(gsonConverterFactory)
             .build()
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideTokenAuthenticator(
+        mainRepository: MainRepository,
+        sharedPreferenceStorage: SharedPreferenceStorage
+    ): TokenAuthenticator {
+        return TokenAuthenticator(mainRepository, sharedPreferenceStorage)
     }
 
     @Provides
