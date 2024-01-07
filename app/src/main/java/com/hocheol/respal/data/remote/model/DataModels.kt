@@ -1,18 +1,5 @@
 package com.hocheol.respal.data.remote.model
 
-import com.google.gson.annotations.SerializedName
-
-data class SampleResponse(
-    @SerializedName("name")
-    val name: String,
-    @SerializedName("id")
-    val id: String,
-    @SerializedName("created_at")
-    val date: String,
-    @SerializedName("html_url")
-    val url: String
-)
-
 data class NewMemberResponseDto(
     val statusCode: Int,
     val result: NewMemberResultDto
@@ -44,10 +31,10 @@ data class UserInfoDto(
 
 data class JoinResponseDto(
     val statusCode: Int,
-    val result: JoinResponseResultDto
+    val result: JoinResultDto
 )
 
-data class JoinResponseResultDto(
+data class JoinResultDto(
     val grantType: String,
     val accessToken: String,
     val refreshToken: String,
@@ -57,13 +44,23 @@ data class JoinResponseResultDto(
 
 data class LoginResponseDto(
     val statusCode: Int,
-    val data: LoginResponseDataDto
+    val result: LoginResultDto
 
 )
-data class LoginResponseDataDto(
+data class LoginResultDto(
     val grantType: String,
     val accessToken: String,
     val refreshToken: String,
     val membersEmail: String,
     val tmpPasswordStatus: String // tmpPasswordStatus 값을 확인해서 Y인 경우 , 비밀번호 재설정 폼으로 이동
+)
+
+data class RefreshTokenResponseDto(
+    val statusCode: Int,
+    val result: RefreshTokenResultDto
+
+)
+data class RefreshTokenResultDto(
+    val message: String,
+    val accessToken: String
 )

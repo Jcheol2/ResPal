@@ -7,19 +7,12 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import com.google.gson.Gson
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.repository.MainRepository
-import com.hocheol.respal.view.MyResumeFragment
 import com.hocheol.respal.widget.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +31,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun signInOauth(context: Context, platform: String) {
+        sharedPreferenceStorage.saveAccessToken("") // 로그인 진행 전 토큰 비우기
         val loginUrl: String
         val clientId: String
         val redirectUri: String

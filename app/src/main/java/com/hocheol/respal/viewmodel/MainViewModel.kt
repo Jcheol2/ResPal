@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
@@ -103,7 +101,7 @@ class MainViewModel @Inject constructor(
                 ))
             sharedPreferenceStorage.saveAccessToken(responseDto.result.accessToken)
             sharedPreferenceStorage.saveRefreshToken(responseDto.result.refreshToken)
-            replaceFragment(MyResumeFragment(sharedPreferenceStorage), null, Contants.MY_RESUME_FRAGMENT_TAG)
+            replaceFragment(MyResumeFragment(), null, Contants.MY_RESUME_FRAGMENT_TAG)
         }, { e ->
             println(e.toString())
         })
@@ -155,7 +153,7 @@ class MainViewModel @Inject constructor(
             println(items)
             sharedPreferenceStorage.saveAccessToken(items.result.accessToken)
             sharedPreferenceStorage.saveRefreshToken(items.result.refreshToken)
-            replaceFragment(MyResumeFragment(sharedPreferenceStorage), null, Contants.MY_RESUME_FRAGMENT_TAG)
+            replaceFragment(MyResumeFragment(), null, Contants.MY_RESUME_FRAGMENT_TAG)
         }, { e ->
             println(e.toString())
         })

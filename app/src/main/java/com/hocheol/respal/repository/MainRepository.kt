@@ -7,11 +7,15 @@ import javax.inject.Inject
 class MainRepository @Inject constructor(
     private val respalApi: RespalApi
 ){
-//    fun getUserInfo(owner: String) = respalApi.getRepos(owner)
     fun sendOauthSignUp(code: String) = respalApi.sendOauthSignUp(code)
     fun sendOauthCallBack(code: String) = respalApi.sendOauthCallBack(code)
     fun signUpOauth(requestBody: RequestBody) = respalApi.signUpOauth(requestBody)
     fun login() = respalApi.login()
     fun logout() = respalApi.logout()
     fun test() = respalApi.test()
+    fun reAuth(refreshToken: String) = respalApi.reAuth(refreshToken)
+    fun findMyResume() = respalApi.findMyResume()
+    fun findHubResume() = respalApi.findHubResume()
+    fun findTagResume() = respalApi.findTagResume()
+
 }

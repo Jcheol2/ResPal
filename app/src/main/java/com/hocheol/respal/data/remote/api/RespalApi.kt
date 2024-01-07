@@ -1,15 +1,16 @@
 package com.hocheol.respal.data.remote.api
 
+import com.google.gson.JsonObject
 import com.hocheol.respal.data.remote.model.ExistingMemberResponseDto
 import com.hocheol.respal.data.remote.model.JoinResponseDto
 import com.hocheol.respal.data.remote.model.LoginResponseDto
 import com.hocheol.respal.data.remote.model.NewMemberResponseDto
-import com.hocheol.respal.data.remote.model.SampleResponse
+import com.hocheol.respal.data.remote.model.RefreshTokenResponseDto
 import io.reactivex.Single
 import okhttp3.RequestBody
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -34,12 +35,22 @@ interface RespalApi {
 
     /** 로그아웃 */
     @POST("member/logout")
-//    @Header("Bearer")
-    fun logout() : Single<List<SampleResponse>>
+    fun logout() : Single<JsonObject>
 
     /** TEST */
     @GET("test")
-//    @Header("Bearer")
-    fun test() : Single<List<SampleResponse>>
+    fun test() : Single<JsonObject>
+
+    @POST("jtw/refresh")
+    fun reAuth(@Header("Authorization") refreshToken: String): Single<RefreshTokenResponseDto>
+
+    @GET("/resume?type=me")
+    fun findMyResume() : Single<JsonObject>
+
+    @GET("/resume?type=hub")
+    fun findHubResume() : Single<JsonObject>
+
+    @GET("/resume?type=tag")
+    fun findTagResume() : Single<JsonObject>
 
 }
