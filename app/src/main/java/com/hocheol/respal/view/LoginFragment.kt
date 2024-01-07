@@ -23,6 +23,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         binding.googleLoginBtn.setOnClickListener(oauthClickListener)
         binding.kakaoLoginBtn.setOnClickListener(oauthClickListener)
 
+        mainViewModel.oauthResponse.observe(requireActivity()) { oauthResponse ->
+            if (oauthResponse.second == "signup") {
+//                viewModel.sendOauthSignUp(oauthResponse.first)
+            } else {
+//                viewModel.sendOauthCallBack(oauthResponse.first)
+            }
+        }
+
         viewModel.fragmentToReplace.observe(this) { newFragment ->
             Log.d(TAG, "fragmentToReplace Observe")
             if (newFragment != null) {
@@ -44,6 +52,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 //                }
 //            }
 //        }
+        mainViewModel.oauthResponse.observe(requireActivity()) { oauthResponse ->
+            if (oauthResponse.second == "signup") {
+//                viewModel.sendOauthSignUp(oauthResponse.first)
+            } else {
+//                viewModel.sendOauthCallBack(oauthResponse.first)
+            }
+        }
     }
 
     private val oauthClickListener = View.OnClickListener { view ->
