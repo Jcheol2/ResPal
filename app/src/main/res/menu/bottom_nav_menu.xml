@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/myFragment"
+        android:title="MY"
+        android:icon="@drawable/ic_my" />
+    <item
+        android:id="@+id/activityFragment"
+        android:title="Activity"
+        android:icon="@drawable/ic_activity" />
+    <item
+        android:id="@+id/settingsFragment"
+        android:title="Settings"
+        android:icon="@drawable/ic_settings" />
+</menu>
