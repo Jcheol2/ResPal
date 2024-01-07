@@ -2,6 +2,7 @@ package com.hocheol.respal.data.local
 
 import android.content.Context
 import com.google.gson.Gson
+import com.hocheol.respal.data.local.model.UserInfo
 import javax.inject.Inject
 
 class SharedPreferenceStorage @Inject constructor(context: Context) {
@@ -31,5 +32,19 @@ class SharedPreferenceStorage @Inject constructor(context: Context) {
 
     fun getRefreshToken(): String? {
         return commonPref.getString("refreshToken", null)
+    }
+
+    fun saveUserInfo(inputUserInfo: UserInfo) {
+        val userInfoJson = gson.toJson(inputUserInfo)
+        commonEditor.putString("userInfo", userInfoJson).apply()
+    }
+
+    fun getUserInfo(): UserInfo? {
+        val userInfoJson = commonPref.getString("userInfo", null)
+        return if (userInfoJson != null) {
+            gson.fromJson(userInfoJson, UserInfo::class.java)
+        } else {
+            null
+        }
     }
 }
