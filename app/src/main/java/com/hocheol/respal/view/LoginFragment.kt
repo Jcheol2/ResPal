@@ -3,6 +3,7 @@ package com.hocheol.respal.view
 import android.util.Log
 import android.view.View
 import com.hocheol.respal.widget.utils.Contants.MY_RESUME_FRAGMENT_TAG
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseFragment
@@ -16,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
     private var TAG = this.javaClass.simpleName
 
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<LoginViewModel>()
 
     override fun init() {
