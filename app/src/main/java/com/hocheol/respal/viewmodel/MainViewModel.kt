@@ -29,8 +29,9 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val TAG = this.javaClass.simpleName
     private lateinit var supportFragmentManager: FragmentManager
-    private val _oauthResponse = SingleLiveEvent<Pair<String, String>>()
-    val oauthResponse: SingleLiveEvent<Pair<String, String>> = _oauthResponse
+
+    private val _currentFragment = MutableLiveData<Fragment?>()
+    val currentFragment: LiveData<Fragment?> = _currentFragment
 
     fun init(sfm: FragmentManager) {
         supportFragmentManager = sfm
@@ -50,7 +51,7 @@ class MainViewModel @Inject constructor(
             .add(R.id.frame_layout, fragment, tag)
             .addToBackStack(null)
             .commitAllowingStateLoss()
-//        _fragmentToReplace.postValue(fragment)
+        _currentFragment.postValue(fragment)
     }
 
     fun replaceFragment(fragment: Fragment, data: JSONObject?, tag: String) {
@@ -66,7 +67,7 @@ class MainViewModel @Inject constructor(
             .beginTransaction()
             .replace(R.id.frame_layout, fragment, tag)
             .commitAllowingStateLoss()
-//        _fragmentToReplace.postValue(fragment)
+        _currentFragment.postValue(fragment)
     }
 
     fun closeFragment(fragment: Fragment) {
@@ -82,7 +83,7 @@ class MainViewModel @Inject constructor(
         val indexOfRemovedFragment = list.indexOf(fragment)
         val previousFragment = if (indexOfRemovedFragment > 0) list[indexOfRemovedFragment - 1] else null
         Log.e("Test", "[closeFragment] previousFragment  = $previousFragment")
-//        _fragmentToReplace.postValue(previousFragment)
+        _currentFragment.postValue(previousFragment)
     }
 
     fun sendOauthCallBack(code: String) = mainRepository.sendOauthCallBack(code)

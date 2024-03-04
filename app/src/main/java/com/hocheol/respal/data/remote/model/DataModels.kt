@@ -29,12 +29,12 @@ data class UserInfoDto(
     val nickname: String
 )
 
-data class JoinResponseDto(
+data class SignUpResponseDto(
     val statusCode: Int,
-    val result: JoinResultDto
+    val result: SignUpResultDto
 )
 
-data class JoinResultDto(
+data class SignUpResultDto(
     val grantType: String,
     val accessToken: String,
     val refreshToken: String,

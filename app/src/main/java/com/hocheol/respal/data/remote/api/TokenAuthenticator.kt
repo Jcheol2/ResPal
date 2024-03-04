@@ -40,7 +40,6 @@ class TokenAuthenticator @Inject constructor(
     private fun fetchNewAccessToken(): Boolean {
         return runBlocking {
             try {
-                // sendServer시에 헤더가 딸려갈 수 있으니까 초기화하고 진행
                 sharedPreferenceStorage.saveAccessToken("")
                 if (sharedPreferenceStorage.getRefreshToken() != null) {
                     val response = sendServer(sharedPreferenceStorage.getRefreshToken()!!)
