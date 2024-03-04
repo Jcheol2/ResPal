@@ -1,23 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:clickable="true"
     android:background="@color/white">
 
     <LinearLayout
+        android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".view.MyResumeFragment">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp">
+
         <ImageView
             android:id="@+id/profile_icon_image"
-            android:background="@color/primary"
-            android:src="@drawable/toolbar_logo_ic"
-            android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_width="80dp"
-            android:layout_height="80dp"/>
+            android:src="@drawable/default_user_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
+
+    </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/profile_user_name_text"
