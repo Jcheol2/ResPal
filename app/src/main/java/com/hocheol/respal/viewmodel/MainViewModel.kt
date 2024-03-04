@@ -4,20 +4,23 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.local.model.UserInfo
+import com.hocheol.respal.data.remote.model.ExistingMemberResponseDto
+import com.hocheol.respal.data.remote.model.SignUpResponseDto
+import com.hocheol.respal.data.remote.model.NewMemberResponseDto
 import com.hocheol.respal.repository.MainRepository
-import com.hocheol.respal.view.MyResumeFragment
-import com.hocheol.respal.widget.utils.Contants
-import com.hocheol.respal.widget.utils.SingleLiveEvent
+import com.hocheol.respal.widget.utils.toJsonRequestBody
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -86,76 +89,143 @@ class MainViewModel @Inject constructor(
         _currentFragment.postValue(previousFragment)
     }
 
-    fun sendOauthCallBack(code: String) = mainRepository.sendOauthCallBack(code)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe({ responseDto ->
-            // 여기서 액세스토큰 리프레시 토큰 저장 후 ME 화면으로 이동
-            println(responseDto)
-            sharedPreferenceStorage.saveUserInfo(
-                UserInfo(
-                    responseDto.result.userInfo.email,
-                    null,
-                    responseDto.result.userInfo.image,
-                    responseDto.result.userInfo.nickname,
-                    responseDto.result.provider
-                ))
-            sharedPreferenceStorage.saveAccessToken(responseDto.result.accessToken)
-            sharedPreferenceStorage.saveRefreshToken(responseDto.result.refreshToken)
-            replaceFragment(MyResumeFragment(), null, Contants.MY_RESUME_FRAGMENT_TAG)
-        }, { e ->
-            println(e.toString())
-        })
-
-    fun sendOauthSignUp(code: String) = mainRepository.sendOauthSignUp(code)
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(
-            { responseDto ->
-                val requestInput: HashMap<String, Any?> = HashMap()
-                requestInput["email"] = responseDto.result.userInfo.email
-                requestInput["password"] = null
-                requestInput["picture"] = responseDto.result.userInfo.image
-                requestInput["nickname"] = responseDto.result.userInfo.nickname
-                requestInput["provider"] = responseDto.result.provider
+    fun sendOauthCallBack(code: String, callback: (Boolean) -> Unit) {
+        coroutineScope.launch {
+            try {
+                val response: ExistingMemberResponseDto = withContext(Dispatchers.IO) {
+                    try {
+                        mainRepository.sendOauthCallBack(code).blockingGet()
+                    } catch (e: HttpException) {
+                        val errorCode = e.code()
+                        Log.e(TAG, "HTTP Error Code: $errorCode")
+                        throw e
+                    }
+                }
+                Log.d("정철", response.toString())
                 sharedPreferenceStorage.saveUserInfo(
                     UserInfo(
-                        responseDto.result.userInfo.email,
+                        response.result.userInfo.email,
                         null,
-                        responseDto.result.userInfo.image,
-                        responseDto.result.userInfo.nickname,
-                        responseDto.result.provider
+                        response.result.userInfo.image,
+                        response.result.userInfo.nickname,
+                        response.result.provider
                     ))
-                val gson = Gson()
-                val mediaType = "application/json".toMediaTypeOrNull()
-                val json = gson.toJson(requestInput)
-                val requestBody = RequestBody.create(mediaType, json)
-
-                Log.d(TAG, "requestInput : $requestInput")
-                signUpOauth(requestBody)
-            },
-            { error ->
-                error.printStackTrace()  // 에러 로그 출력
-
-                val response = error as? HttpException
-                if (response?.code() == 400) {
-                    println("type 설정 에러")
-                } else {
-                    // 기타 에러 처리
-                }
+                sharedPreferenceStorage.saveAccessToken(response.result.accessToken)
+                sharedPreferenceStorage.saveRefreshToken(response.result.refreshToken)
+                callback(true)
+            } catch (e: Exception) {
+                Log.d(TAG, e.printStackTrace().toString())
+                callback(false)
             }
-        )
+        }
+    }
 
-    private fun signUpOauth(requestBody: RequestBody) = mainRepository.signUpOauth(requestBody)
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe({ items ->
-            // 여기서 액세스토큰 리프레시 토큰 저장 후 ME 화면으로 이동
-            println(items)
-            sharedPreferenceStorage.saveAccessToken(items.result.accessToken)
-            sharedPreferenceStorage.saveRefreshToken(items.result.refreshToken)
-            replaceFragment(MyResumeFragment(), null, Contants.MY_RESUME_FRAGMENT_TAG)
-        }, { e ->
-            println(e.toString())
-        })
+    fun sendOauthSignUp(code: String, callback: (Boolean) -> Unit) {
+        coroutineScope.launch {
+            try {
+                val response: NewMemberResponseDto = withContext(Dispatchers.IO) {
+                    try {
+                        mainRepository.sendOauthSignUp(code).blockingGet()
+                    } catch (e: HttpException) {
+                        val errorCode = e.code()
+                        Log.e(TAG, "HTTP Error Code: $errorCode")
+                        throw e
+                    }
+                }
+
+                val requestInput: HashMap<String, Any?> = HashMap()
+                requestInput["email"] = response.result.userInfo.email
+                requestInput["password"] = "temp1234!"
+                requestInput["picture"] = response.result.userInfo.image
+                requestInput["nickname"] = response.result.userInfo.nickname
+                requestInput["provider"] = response.result.provider
+
+                sharedPreferenceStorage.saveUserInfo(
+                    UserInfo(
+                        response.result.userInfo.email,
+                        "temp1234!",
+                        response.result.userInfo.image,
+                        response.result.userInfo.nickname,
+                        response.result.provider
+                    )
+                )
+
+                val gson = Gson()
+                Log.d(TAG, "Request JSON: ${gson.toJson(requestInput)}")
+
+                // Use async to execute this block concurrently
+                val response1Deferred = async(Dispatchers.IO) {
+                    try {
+                        mainRepository.signUpOauth(requestInput.toJsonRequestBody()).blockingGet()
+                    } catch (e: HttpException) {
+                        val errorCode = e.code()
+                        Log.e(TAG, "HTTP Error Code: $errorCode")
+                        throw e
+                    }
+                }
+
+                // Wait for the result of the async block
+                val response1: SignUpResponseDto = response1Deferred.await()
+
+                sharedPreferenceStorage.saveAccessToken(response1.result.accessToken)
+                sharedPreferenceStorage.saveRefreshToken(response1.result.refreshToken)
+                callback(true)
+            } catch (e: Exception) {
+                Log.d(TAG, e.printStackTrace().toString())
+                callback(false)
+            }
+        }
+    }
+
+//    fun sendOauthSignUp(code: String) = mainRepository.sendOauthSignUp(code)
+//        .subscribeOn(Schedulers.io())
+//        .observeOn(AndroidSchedulers.mainThread())
+//        .subscribe(
+//            { responseDto ->
+//                val requestInput: HashMap<String, Any?> = HashMap()
+//                requestInput["email"] = responseDto.result.userInfo.email
+//                requestInput["password"] = "temp1234!"
+//                requestInput["picture"] = responseDto.result.userInfo.image
+//                requestInput["nickname"] = responseDto.result.userInfo.nickname
+//                requestInput["provider"] = responseDto.result.provider
+//                sharedPreferenceStorage.saveUserInfo(
+//                    UserInfo(
+//                        responseDto.result.userInfo.email,
+//                        "temp1234!",
+//                        responseDto.result.userInfo.image,
+//                        responseDto.result.userInfo.nickname,
+//                        responseDto.result.provider
+//                    ))
+//                val gson = Gson()
+//                val mediaType = "application/json".toMediaTypeOrNull()
+//                val json = gson.toJson(requestInput)
+//                val requestBody = RequestBody.create(mediaType, json)
+//
+//                Log.d(TAG, "requestInput : $requestInput")
+//                signUpOauth(requestBody)
+//            },
+//            { error ->
+//                error.printStackTrace()  // 에러 로그 출력
+//
+//                val response = error as? HttpException
+//                if (response?.code() == 400) {
+//                    println("type 설정 에러")
+//                } else {
+//                    // 기타 에러 처리
+//                }
+//            }
+//        )
+//
+//    private fun signUpOauth(requestBody: RequestBody) = mainRepository.signUpOauth(requestBody)
+//        .subscribeOn(Schedulers.io())
+//        .observeOn(Schedulers.io())
+//        .subscribe({ items ->
+//            // 여기서 액세스토큰 리프레시 토큰 저장 후 ME 화면으로 이동
+//            println(items)
+//            sharedPreferenceStorage.saveAccessToken(items.result.accessToken)
+//            sharedPreferenceStorage.saveRefreshToken(items.result.refreshToken)
+//            replaceFragment(MyResumeFragment(), null, Contants.MY_RESUME_FRAGMENT_TAG)
+//        }, { e ->
+//            println(e.toString())
+//        })
 }

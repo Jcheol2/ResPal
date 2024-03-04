@@ -45,9 +45,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 val code = uri.getQueryParameter("uid")
                 longShowToast("code : $code")
                 if (path.startsWith("signup")) {
-                    code?.let { mainViewModel.sendOauthSignUp(it) }
+                    code?.let { mainViewModel.sendOauthSignUp(it) { result ->
+                        if (result) {
+                            Log.d("정철", "success")
+                        } else {
+                            Log.d("정철", "fail")
+                        }
+                    } }
                 } else if (path.startsWith("callback")) {
-                    code?.let { mainViewModel.sendOauthCallBack(it) }
+                    code?.let { mainViewModel.sendOauthCallBack(it) { result ->
+                        if (result) {
+                            Log.d("정철", "success")
+                        } else {
+                            Log.d("정철", "fail")
+                        }
+                    } }
                 } else {
                     print("Oauth error")
                     return
@@ -66,9 +78,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             val code = uri.getQueryParameter("uid")
             longShowToast("code : $code")
             if (path.startsWith("signup")) {
-                code?.let { mainViewModel.sendOauthSignUp(it) }
+                code?.let { mainViewModel.sendOauthSignUp(it) { result ->
+                    if (result) {
+                        Log.d("정철", "success")
+                    } else {
+                        Log.d("정철", "fail")
+                    }
+                } }
             } else if (path.startsWith("callback")) {
-                code?.let { mainViewModel.sendOauthCallBack(it) }
+                code?.let { mainViewModel.sendOauthCallBack(it) { result ->
+                    if (result) {
+                        Log.d("정철", "success")
+                    } else {
+                        Log.d("정철", "fail")
+                    }
+                } }
             } else {
                 print("Oauth error")
                 return
