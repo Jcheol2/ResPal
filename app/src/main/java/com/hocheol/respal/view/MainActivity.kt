@@ -2,6 +2,7 @@ package com.hocheol.respal.view
 
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseActivity
@@ -14,15 +15,25 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val TAG = this.javaClass.simpleName
-    private val mainViewModel by viewModels<MainViewModel>() // by viewModels()을 사용하여 Hilt가 생성한 ViewModel 인스턴스를 획득
+    private val mainViewModel by viewModels<MainViewModel>()
     private val loginViewModel by viewModels<LoginViewModel>()
 
-    // onCreate는 BaseActivity에서 정의했으므로 init이 거의 onCreate인 셈
     override fun init() {
         binding.activity = this
         mainViewModel.init(supportFragmentManager)
         mainViewModel.openFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
         handleIntent(intent)
+
+        mainViewModel.currentFragment.observe(this) { currentFragment ->
+            if (currentFragment == null) return@observe
+            if (currentFragment.tag!!.contains("LOGIN")) {
+                binding.toolbarView.visibility = View.GONE
+                binding.bottomNavView.visibility = View.GONE
+            } else {
+                binding.toolbarView.visibility = View.VISIBLE
+                binding.bottomNavView.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun handleIntent(intent: Intent?) {
