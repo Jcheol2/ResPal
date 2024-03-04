@@ -1,4 +1,4 @@
-package com.bixolon.tableorder.view.etc
+package com.hocheol.respal.widget.utils
 
 import android.view.View
 import com.google.gson.Gson
