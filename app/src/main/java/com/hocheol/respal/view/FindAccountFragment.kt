@@ -9,7 +9,7 @@ import com.hocheol.respal.databinding.FragmentFindAccountBinding
 import com.hocheol.respal.databinding.FragmentLoginBinding
 import com.hocheol.respal.viewmodel.FindAccountViewModel
 import com.hocheol.respal.viewmodel.MainViewModel
-import com.hocheol.respal.widget.utils.Contants.LOGIN_FRAGMENT_TAG
+import com.hocheol.respal.widget.utils.Constants.LOGIN_FRAGMENT_TAG
 import com.hocheol.respal.widget.utils.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 

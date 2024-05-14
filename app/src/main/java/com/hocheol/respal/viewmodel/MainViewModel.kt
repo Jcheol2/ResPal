@@ -224,7 +224,7 @@ class MainViewModel @Inject constructor(
 //            println(items)
 //            sharedPreferenceStorage.saveAccessToken(items.result.accessToken)
 //            sharedPreferenceStorage.saveRefreshToken(items.result.refreshToken)
-//            replaceFragment(MyResumeFragment(), null, Contants.MY_RESUME_FRAGMENT_TAG)
+//            replaceFragment(MyResumeFragment(), null, Constants.MY_RESUME_FRAGMENT_TAG)
 //        }, { e ->
 //            println(e.toString())
 //        })

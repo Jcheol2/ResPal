@@ -8,7 +8,7 @@ import com.hocheol.respal.databinding.FragmentLoginBinding
 import com.hocheol.respal.databinding.FragmentSignUpBinding
 import com.hocheol.respal.viewmodel.MainViewModel
 import com.hocheol.respal.viewmodel.SignUpViewModel
-import com.hocheol.respal.widget.utils.Contants.LOGIN_FRAGMENT_TAG
+import com.hocheol.respal.widget.utils.Constants.LOGIN_FRAGMENT_TAG
 import com.hocheol.respal.widget.utils.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
