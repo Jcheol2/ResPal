@@ -5,7 +5,7 @@ import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.remote.api.RespalApi
 import com.hocheol.respal.data.remote.api.TokenAuthenticator
 import com.hocheol.respal.repository.MainRepository
-import com.hocheol.respal.widget.utils.Contants.BASE_URL
+import com.hocheol.respal.widget.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
