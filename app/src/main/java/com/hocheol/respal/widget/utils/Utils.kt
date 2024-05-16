@@ -7,6 +7,8 @@ object Constants {
     const val SIGN_UP_FRAGMENT_TAG = "LOGIN_SIGN_UP_FRAGMENT"
     const val FIND_ACCOUNT_FRAGMENT_TAG = "LOGIN_FIND_ACCOUNT_FRAGMENT"
     const val MY_RESUME_FRAGMENT_TAG = "MY_RESUME_FRAGMENT"
+    const val ACTIVITY_FRAGMENT_TAG = "ACTIVITY_FRAGMENT"
+    const val SETTINGS_FRAGMENT = "SETTINGS_FRAGMENT"
 
     const val GITHUB = "Github"
     const val GOOGLE = "google"
