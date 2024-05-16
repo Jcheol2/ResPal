@@ -18,11 +18,11 @@
             android:id="@+id/toolbar_view"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="80dp">
+            android:layout_height="88dp">
 
             <View
                 android:clickable="false"
-                android:background="@color/primary"
+                android:background="@color/color_3B3B3B"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>
 
@@ -30,14 +30,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="16dp"
-                app:cardBackgroundColor="@color/primary">
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/color_3B3B3B">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/main_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/primary">
+                    android:background="@color/color_3B3B3B">
 
                     <ImageView
                         android:id="@+id/toolbar_title_image"
@@ -50,7 +50,7 @@
                     <TextView
                         android:id="@+id/setting_btn"
                         android:text="..."
-                        android:textColor="@color/white"
+                        android:textColor="@color/color_white"
                         android:textStyle="bold"
                         android:textSize="20sp"
                         android:layout_width="wrap_content"
@@ -66,7 +66,11 @@
 
         <FrameLayout
             android:id="@+id/frame_layout"
-            android:background="@android:color/white"
+            android:visibility="visible"
+            android:background="@color/color_white"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"/>
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp"/>

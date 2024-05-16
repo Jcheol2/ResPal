@@ -3,8 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/color_white"
     android:clickable="true"
-    android:background="@color/white">
+    android:focusable="true">
 
     <LinearLayout
         android:padding="10dp"
@@ -31,12 +32,12 @@
 
         <TextView
             android:id="@+id/profile_user_name_text"
-            android:text="Jcheol_Park"
+            android:text="No Name"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:textSize="17sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
+            android:textColor="@color/color_black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
@@ -90,6 +91,7 @@
                 android:layout_height="20dp"/>
 
             <TextView
+                android:id="@+id/edit_profile_btn"
                 android:text="Edit Profile"
                 android:textSize="17sp"
                 android:textStyle="bold"
@@ -107,23 +109,29 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/my_cv_btn"
                 android:text="My CV"
                 android:textSize="17sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/color_white"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:background="@drawable/rectangle_background"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
             <TextView
+                android:id="@+id/mentioned_btn"
                 android:text="Mentioned"
                 android:textSize="17sp"
                 android:textStyle="bold"
-                android:layout_marginStart="15dp"
+                android:textColor="@color/color_3B3B3B"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

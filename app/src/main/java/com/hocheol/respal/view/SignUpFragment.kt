@@ -20,13 +20,13 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
     private val viewModel by viewModels<SignUpViewModel>()
 
     override fun init() {
-        binding.githubLoginBtn
-        binding.googleLoginBtn
-        binding.kakaoLoginBtn
-        binding.idInputText
-        binding.pwInputText
-        binding.emailInputText
-        binding.nickNameInputText
+        binding.githubLoginBtn // TODO
+        binding.googleLoginBtn // TODO
+        binding.kakaoLoginBtn // TODO
+        binding.idInputText // TODO
+        binding.pwInputText // TODO
+        binding.emailInputText // TODO
+        binding.nickNameInputText // TODO
         binding.termsOfServiceBtn.setOnSingleClickListener {
         }
         binding.privacyPolicyBtn.setOnSingleClickListener {

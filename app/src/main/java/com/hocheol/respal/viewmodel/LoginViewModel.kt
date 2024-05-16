@@ -62,7 +62,7 @@ class LoginViewModel @Inject constructor(
         try {
             val customTabsIntent = CustomTabsIntent.Builder()
                 .setShowTitle(false)
-                .setToolbarColor(ContextCompat.getColor(context, R.color.primary))
+                .setToolbarColor(ContextCompat.getColor(context, R.color.color_3B3B3B))
                 .build()
             customTabsIntent.intent.data = authUrl
 

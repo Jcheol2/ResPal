@@ -24,8 +24,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     private val viewModel by viewModels<LoginViewModel>()
 
     override fun init() {
-        binding.idInputText
-        binding.pwInputText
+        binding.idInputText // TODO
+        binding.pwInputText // TODO
         binding.findAccountBtn.setOnSingleClickListener {
             mainViewModel.replaceFragment(FindAccountFragment(), null, FIND_ACCOUNT_FRAGMENT_TAG)
         }
