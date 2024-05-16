@@ -14,7 +14,7 @@
             <item
                 android:right="5dp"
                 android:gravity="end"
-                android:drawable="@drawable/spinner_arrow"/>
+                android:drawable="@drawable/ic_spinner_arrow"/>
         </layer-list>
     </item>
 </selector>

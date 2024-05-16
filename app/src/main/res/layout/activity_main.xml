@@ -43,7 +43,7 @@
                         android:id="@+id/toolbar_title_image"
                         android:layout_width="70dp"
                         android:layout_height="25dp"
-                        android:src="@drawable/toolbar_logo_ic"
+                        android:src="@drawable/ic_toolbar_logo"
                         android:layout_gravity="start"
                         android:layout_marginStart="19dp" />
 
@@ -90,7 +90,7 @@
                 android:id="@+id/shadow_view"
                 android:layout_width="match_parent"
                 android:layout_height="4dp"
-                android:background="@drawable/shadow_background" />
+                android:background="@drawable/background_shadow" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottom_nav"

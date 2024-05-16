@@ -16,7 +16,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/app_icon"
+                android:src="@drawable/ic_app_icon"
                 android:layout_marginTop="30dp"
                 android:layout_gravity="center"
                 android:layout_width="60dp"
@@ -59,8 +59,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/github_login_btn"
-                    android:src="@drawable/github_ic"
-                    android:background="@drawable/button_background_acacac"
+                    android:src="@drawable/ic_github"
+                    android:background="@drawable/background_button_acacac"
                     android:scaleType="fitCenter"
                     android:padding="10dp"
                     android:layout_weight="1"
@@ -73,8 +73,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/google_login_btn"
-                    android:src="@drawable/google_ic"
-                    android:background="@drawable/button_background_acacac"
+                    android:src="@drawable/ic_google"
+                    android:background="@drawable/background_button_acacac"
                     android:scaleType="fitCenter"
                     android:padding="10dp"
                     android:layout_weight="1"
@@ -87,8 +87,8 @@
 
                 <androidx.appcompat.widget.AppCompatImageButton
                     android:id="@+id/kakao_login_btn"
-                    android:src="@drawable/kakao_ic"
-                    android:background="@drawable/button_background_acacac"
+                    android:src="@drawable/ic_kakao"
+                    android:background="@drawable/background_button_acacac"
                     android:scaleType="fitCenter"
                     android:padding="10dp"
                     android:layout_weight="1"
@@ -139,7 +139,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/id_input_text"
                 android:inputType="text"
-                android:background="@drawable/button_background_acacac"
+                android:background="@drawable/background_text_acacac"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -161,7 +161,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/pw_input_text"
                 android:inputType="textPassword"
-                android:background="@drawable/button_background_acacac"
+                android:background="@drawable/background_text_acacac"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -183,7 +183,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/email_input_text"
                 android:inputType="text"
-                android:background="@drawable/button_background_acacac"
+                android:background="@drawable/background_text_acacac"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -204,7 +204,7 @@
 
             <Spinner
                 android:id="@+id/job_spinner"
-                android:background="@drawable/spinner_background"
+                android:background="@drawable/background_spinner"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -226,7 +226,7 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/nick_name_input_text"
                 android:inputType="text"
-                android:background="@drawable/button_background_acacac"
+                android:background="@drawable/background_text_acacac"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -277,7 +277,7 @@
                 android:textColor="@color/color_white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:background="@color/color_black"
+                android:background="@drawable/background_button_3b3b3b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 

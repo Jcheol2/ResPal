@@ -23,7 +23,7 @@
 
         <ImageView
             android:id="@+id/profile_icon_image"
-            android:src="@drawable/default_user_icon"
+            android:src="@drawable/ic_user"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/thumbs_up_ic"
+                android:src="@drawable/ic_thumbs_up"
                 android:scaleType="fitXY"
                 android:layout_width="20dp"
                 android:layout_height="20dp"/>
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"/>
 
             <ImageView
-                android:src="@drawable/comment_ic"
+                android:src="@drawable/ic_comment"
                 android:layout_marginStart="14dp"
                 android:scaleType="fitXY"
                 android:layout_width="20dp"
@@ -85,7 +85,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:src="@drawable/edit_btn"
+                android:src="@drawable/ic_edit"
                 android:scaleType="fitXY"
                 android:layout_width="20dp"
                 android:layout_height="20dp"/>
@@ -118,7 +118,7 @@
                 android:paddingBottom="5dp"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:background="@drawable/rectangle_background"
+                android:background="@drawable/background_button_6d4acd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

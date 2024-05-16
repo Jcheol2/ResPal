@@ -33,7 +33,7 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
         binding.myCvBtn.setOnSingleClickListener {
             if (btnState != "myCv") {
                 binding.myCvBtn.setTextColor(resources.getColor(R.color.color_white))
-                binding.myCvBtn.setBackgroundResource(R.drawable.rectangle_background)
+                binding.myCvBtn.setBackgroundResource(R.drawable.background_button_6d4acd)
                 binding.mentionedBtn.setTextColor(resources.getColor(R.color.color_3B3B3B))
                 binding.mentionedBtn.background = null
                 btnState = "myCv"
@@ -42,7 +42,7 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
         binding.mentionedBtn.setOnSingleClickListener {
             if (btnState != "mentioned") {
                 binding.mentionedBtn.setTextColor(resources.getColor(R.color.color_white))
-                binding.mentionedBtn.setBackgroundResource(R.drawable.rectangle_background)
+                binding.mentionedBtn.setBackgroundResource(R.drawable.background_button_6d4acd)
                 binding.myCvBtn.setTextColor(resources.getColor(R.color.color_3B3B3B))
                 binding.myCvBtn.background = null
                 btnState = "mentioned"
