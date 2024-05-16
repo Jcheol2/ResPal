@@ -1,11 +1,7 @@
 package com.hocheol.respal.data.remote.api
 
 import com.google.gson.JsonObject
-import com.hocheol.respal.data.remote.model.ExistingMemberResponseDto
-import com.hocheol.respal.data.remote.model.SignUpResponseDto
-import com.hocheol.respal.data.remote.model.LoginResponseDto
-import com.hocheol.respal.data.remote.model.NewMemberResponseDto
-import com.hocheol.respal.data.remote.model.RefreshTokenResponseDto
+import com.hocheol.respal.data.remote.model.*
 import io.reactivex.Single
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -29,11 +25,15 @@ interface RespalApi {
 
     /** 로그인 */
     @POST("member/login")
-    fun login() : Single<LoginResponseDto>
+    fun login(@Body requestBody: RequestBody) : Single<LoginResponseDto>
 
     /** 회원가입 */
     @POST("member/join")
     fun signUp(@Body requestBody: RequestBody) : Single<SignUpResponseDto>
+
+    /** 계정찾기 */
+    @POST("password")
+    fun findAccount(@Body requestBody: RequestBody) : Single<FindAccountResponseDto>
 
     /** Access Token 재발급 */
     @POST("jwt/refresh")

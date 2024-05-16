@@ -9,9 +9,10 @@ class MainRepository @Inject constructor(
 ){
     fun sendOauthSignUp(code: String) = respalApi.sendOauthSignUp(code)
     fun sendOauthCallBack(code: String) = respalApi.sendOauthCallBack(code)
-    fun signUpOauth(requestBody: RequestBody) = respalApi.signUp(requestBody)
-    fun login() = respalApi.login()
+    fun signUp(requestBody: RequestBody) = respalApi.signUp(requestBody)
+    fun login(requestBody: RequestBody) = respalApi.login(requestBody)
     fun logout() = respalApi.logout()
+    fun findAccount(requestBody: RequestBody) = respalApi.findAccount(requestBody)
     fun test() = respalApi.test()
     fun reAuth(refreshToken: String) = respalApi.reAuth(refreshToken)
     fun findMyResume() = respalApi.findMyResume()

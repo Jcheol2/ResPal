@@ -156,7 +156,7 @@ class MainViewModel @Inject constructor(
                 // Use async to execute this block concurrently
                 val response1Deferred = async(Dispatchers.IO) {
                     try {
-                        mainRepository.signUpOauth(requestInput.toJsonRequestBody()).blockingGet()
+                        mainRepository.signUp(requestInput.toJsonRequestBody()).blockingGet()
                     } catch (e: HttpException) {
                         val errorCode = e.code()
                         Log.e(TAG, "HTTP Error Code: $errorCode")

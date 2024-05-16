@@ -8,11 +8,18 @@ import androidx.core.content.ContextCompat
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
+import com.hocheol.respal.data.local.model.UserInfo
+import com.hocheol.respal.data.remote.model.LoginResponseDto
 import com.hocheol.respal.repository.MainRepository
 import com.hocheol.respal.widget.utils.Constants.GITHUB
 import com.hocheol.respal.widget.utils.Constants.GOOGLE
 import com.hocheol.respal.widget.utils.Constants.KAKAO
+import com.hocheol.respal.widget.utils.toJsonRequestBody
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,8 +29,45 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val TAG = this.javaClass.simpleName
 
+    fun commonLogin(inputEmail: String, inputPw: String,
+                    loginCallback: (Boolean) -> Unit) {
+        sharedPreferenceStorage.saveAccessToken("")
+        coroutineScope.launch {
+            try {
+                val loginInput: HashMap<String, Any> = HashMap()
+                loginInput["email"] = inputEmail
+                loginInput["password"] = inputPw
+                Log.d(TAG, "loginInput : $loginInput")
+                val response: LoginResponseDto = withContext(Dispatchers.IO) {
+                    try {
+                        mainRepository.login(loginInput.toJsonRequestBody()).blockingGet()
+                    } catch (e: HttpException) {
+                        val errorCode = e.code()
+                        Log.e(TAG, "HTTP Error Code: $errorCode")
+                        throw e
+                    }
+                }
+                sharedPreferenceStorage.saveAccessToken(response.result.accessToken)
+                sharedPreferenceStorage.saveRefreshToken(response.result.refreshToken)
+                sharedPreferenceStorage.saveUserInfo(
+                    UserInfo(
+                        inputEmail,
+                        inputPw,
+                        "",
+                        "",
+                        ""
+                    )
+                )
+                loginCallback(true)
+            } catch (e: Exception) {
+                Log.d(TAG, e.printStackTrace().toString())
+                loginCallback(false)
+            }
+        }
+    }
+
     fun signInOauth(context: Context, platform: String) {
-        sharedPreferenceStorage.saveAccessToken("") // 로그인 진행 전 토큰 비우기
+        sharedPreferenceStorage.saveAccessToken("")
         val loginUrl: String
         val clientId: String
         val redirectUri: String

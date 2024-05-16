@@ -45,14 +45,19 @@ data class SignUpResultDto(
 data class LoginResponseDto(
     val statusCode: Int,
     val result: LoginResultDto
-
 )
+
 data class LoginResultDto(
-    val grantType: String,
+//    val grantType: String,
     val accessToken: String,
     val refreshToken: String,
-    val membersEmail: String,
-    val tmpPasswordStatus: String // tmpPasswordStatus 값을 확인해서 Y인 경우 , 비밀번호 재설정 폼으로 이동
+//    val membersEmail: String,
+//    val tmpPasswordStatus: String // tmpPasswordStatus 값을 확인해서 Y인 경우 , 비밀번호 재설정 폼으로 이동
+)
+
+data class FindAccountResponseDto(
+    val statusCode: Int,
+    val result: String
 )
 
 data class RefreshTokenResponseDto(
