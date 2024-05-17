@@ -26,13 +26,10 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
             val profilePhoto = userInfo.picture.ifEmpty {
                 ContextCompat.getDrawable(requireActivity(), R.drawable.ic_user)
             }
-            val nickname = userInfo.nickname.ifEmpty {
-                userInfo.email
-            }
             Glide.with(this)
                 .load(profilePhoto)
                 .into(binding.profileIconImage)
-            binding.profileUserNameText.text = nickname
+            binding.profileUserNameText.text = userInfo.nickname
         }
         viewModel.findResume {
             activity?.runOnUiThread {

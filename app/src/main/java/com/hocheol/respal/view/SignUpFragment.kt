@@ -19,6 +19,8 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<SignUpViewModel>()
 
+    private lateinit var photoImage: String
+
     override fun init() {
         binding.githubLoginBtn // TODO
         binding.googleLoginBtn // TODO
@@ -40,16 +42,24 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
         }
         binding.signUpBtn.setOnSingleClickListener {
             val inputEmail = binding.emailInputText.text.toString()
+            if (!isValidEmail(inputEmail)) {
+                shortShowToast("Invalid email format")
+                return@setOnSingleClickListener
+            }
             val inputPw = binding.pwInputText.text.toString()
-            val inputNickname = if (!binding.nickNameInputText.text.toString().isEmpty()) {
-                binding.nickNameInputText.text.toString()
+            if (!isValidPassword(inputPw)) {
+                shortShowToast("Password must be 8-20 characters long, and include letters, numbers, and special characters")
+                return@setOnSingleClickListener
+            }
+            val inputNickname = binding.nickNameInputText.text.toString().ifEmpty {
+                inputEmail.split("@")[0]
+            }
+            val inputPhoto = if (::photoImage.isInitialized) {
+                photoImage
             } else {
                 ""
             }
-            val inputPhoto = ""
-            if (inputEmail.isEmpty() || inputPw.isEmpty()) {
-                return@setOnSingleClickListener
-            }
+
             viewModel.signUp(inputEmail, inputPw, inputNickname, inputPhoto) {
                 activity?.runOnUiThread {
                     if (it) {
@@ -63,5 +73,15 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sig
         binding.loginBtn.setOnSingleClickListener {
             mainViewModel.replaceFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
         }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailPattern = "[a-zA-Z\\d._-]+@[a-z]+\\.+[a-z]+"
+        return email.matches(emailPattern.toRegex())
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        val passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@\$!%*?&])[A-Za-z\\d@\$!%*?&]{8,20}\$"
+        return password.matches(passwordPattern.toRegex())
     }
 }
