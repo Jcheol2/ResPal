@@ -7,6 +7,8 @@ import com.hocheol.respal.base.BaseFragment
 import com.hocheol.respal.databinding.FragmentSettingsBinding
 import com.hocheol.respal.viewmodel.MainViewModel
 import com.hocheol.respal.viewmodel.SettingsViewModel
+import com.hocheol.respal.widget.utils.Constants.LOGIN_FRAGMENT_TAG
+import com.hocheol.respal.widget.utils.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,6 +19,17 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
     private val viewModel by viewModels<SettingsViewModel>()
 
     override fun init() {
-
+        binding.logoutBtn.setOnSingleClickListener {
+            viewModel.logout {
+                activity?.runOnUiThread {
+                    if (it) {
+                        shortShowToast("logout Success")
+                        mainViewModel.replaceFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
+                    } else {
+                        shortShowToast("logout Failed")
+                    }
+                }
+            }
+        }
     }
 }

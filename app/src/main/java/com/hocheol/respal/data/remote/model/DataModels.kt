@@ -55,6 +55,11 @@ data class LoginResultDto(
 //    val tmpPasswordStatus: String // tmpPasswordStatus 값을 확인해서 Y인 경우 , 비밀번호 재설정 폼으로 이동
 )
 
+data class LogoutResponseDto(
+    val statusCode: Int,
+    val result: String
+)
+
 data class FindAccountResponseDto(
     val statusCode: Int,
     val result: String

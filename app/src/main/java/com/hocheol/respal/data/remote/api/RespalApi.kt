@@ -21,7 +21,7 @@ interface RespalApi {
 
     /** 로그아웃 */
     @POST("member/logout")
-    fun logout() : Single<JsonObject>
+    fun logout() : Single<LogoutResponseDto>
 
     /** 로그인 */
     @POST("member/login")
