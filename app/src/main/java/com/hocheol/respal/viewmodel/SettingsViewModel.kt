@@ -1,15 +1,13 @@
 package com.hocheol.respal.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
-import com.hocheol.respal.data.remote.model.LogoutResponseDto
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,22 +16,25 @@ class SettingsViewModel @Inject constructor(
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
     private var TAG = this.javaClass.simpleName
-    fun logout(logoutCallback: (Boolean) -> Unit) {
+
+    private val _logoutResponse = MutableLiveData<Boolean>()
+    val logoutResponse: LiveData<Boolean> get() = _logoutResponse
+
+    fun logout() {
         coroutineScope.launch {
             try {
-                val response: LogoutResponseDto = withContext(Dispatchers.IO) {
-                    try {
-                        mainRepository.logout().blockingGet()
-                    } catch (e: HttpException) { // 응답이 비어서 NoSuchElementException 에러 발생
-                        val errorCode = e.code()
-                        Log.e(TAG, "HTTP Error Code: $errorCode")
-                        throw e
+                mainRepository.logout().subscribe(
+                    { response ->
+                        _logoutResponse.postValue(true)
+                    },
+                    { error ->
+                        Log.e(TAG, "Error during logout: ${error.message}")
+                        _logoutResponse.postValue(false)
                     }
-                }
-                logoutCallback(true)
+                )
             } catch (e: Exception) {
-                Log.d(TAG, e.printStackTrace().toString())
-                logoutCallback(false)
+                _logoutResponse.postValue(false)
+                Log.e(TAG, "Logout failed", e)
             }
         }
     }

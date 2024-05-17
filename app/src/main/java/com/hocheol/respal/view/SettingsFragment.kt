@@ -20,15 +20,19 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
 
     override fun init() {
         binding.logoutBtn.setOnSingleClickListener {
-            viewModel.logout {
-                activity?.runOnUiThread {
-                    if (it) {
-                        shortShowToast("logout Success")
-                        mainViewModel.replaceFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
-                    } else {
-                        shortShowToast("logout Failed")
-                    }
-                }
+            viewModel.logout()
+        }
+
+        initObserve()
+    }
+
+    private fun initObserve() {
+        viewModel.logoutResponse.observe(viewLifecycleOwner) { success ->
+            if (success) {
+                shortShowToast("Logout Success")
+                mainViewModel.replaceFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
+            } else {
+                shortShowToast("Logout Failed")
             }
         }
     }
