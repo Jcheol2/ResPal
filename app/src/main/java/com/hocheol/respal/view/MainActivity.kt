@@ -76,66 +76,33 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         binding.viewPager.offscreenPageLimit = 3
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
     private fun handleIntent(intent: Intent?) {
         if (intent?.action == Intent.ACTION_VIEW) {
             intent.data?.let { uri ->
                 Log.d(TAG, "Received URI: $uri")
                 val prefix = "app://"
                 val path = uri.toString().substring(prefix.length)
-                val code = uri.getQueryParameter("uid")
-                longShowToast("code : $code")
-                if (path.startsWith("signup")) {
-                    code?.let { mainViewModel.sendOauthSignUp(it) { result ->
-                        if (result) {
-                            Log.d("정철", "success")
-                        } else {
-                            Log.d("정철", "fail")
-                        }
-                    } }
-                } else if (path.startsWith("callback")) {
-                    code?.let { mainViewModel.sendOauthCallBack(it) { result ->
-                        if (result) {
-                            Log.d("정철", "success")
-                        } else {
-                            Log.d("정철", "fail")
-                        }
-                    } }
+                val uid = uri.getQueryParameter("uid")
+                val type = if (path.startsWith("signup")) {
+                    "signup"
                 } else {
-                    print("Oauth error")
-                    return
+                    "callback"
                 }
-            }
-        }
-    }
-
-    // Github, Kakao Callback
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        intent?.data?.let { uri ->
-            Log.d(TAG, "Received URI: $uri")
-            val prefix = "app://"
-            val path = uri.toString().substring(prefix.length)
-            val code = uri.getQueryParameter("uid")
-            longShowToast("code : $code")
-            if (path.startsWith("signup")) {
-                code?.let { mainViewModel.sendOauthSignUp(it) { result ->
-                    if (result) {
-                        Log.d("정철", "success")
-                    } else {
-                        Log.d("정철", "fail")
+                Log.e("TEST", "uid : $uid")
+                if (!uid.isNullOrEmpty()) {
+                    mainViewModel.requestOauthInfo(uid, type) { result ->
+                        if (result) {
+                            Log.d("정철", "success")
+                        } else {
+                            Log.d("정철", "fail")
+                        }
                     }
-                } }
-            } else if (path.startsWith("callback")) {
-                code?.let { mainViewModel.sendOauthCallBack(it) { result ->
-                    if (result) {
-                        Log.d("정철", "success")
-                    } else {
-                        Log.d("정철", "fail")
-                    }
-                } }
-            } else {
-                print("Oauth error")
-                return
+                }
             }
         }
     }

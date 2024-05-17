@@ -11,59 +11,76 @@ interface RespalApi {
     @GET("test")
     fun test() : Single<JsonObject>
 
-    /** 임시 비밀번호 이메일 전송 */
-    @POST("password")
-    fun sendTempPassword(@Body requestBody: RequestBody) : Single<ResponseBody>
+    /** 회원가입 */
+    @POST("member/join")
+    fun signUp(
+        @Body requestBody: RequestBody
+    ) : Single<SignUpResponseDto>
 
-    /** 비밀번호 재설정 */
-    @PATCH("password")
-    fun resetPassword(@Body requestBody: RequestBody) : Single<ResponseBody>
-
-    /** 로그아웃 */
-    @POST("member/logout")
-    fun logout() : Single<LogoutResponseDto>
+    /** 회원가입시 이메일 인증 */
+    @GET("member/email")
+    fun emailAuth(
+        @Query("email") inputEmail: String
+    ) : Single<ResponseBody>
 
     /** 로그인 */
     @POST("member/login")
-    fun login(@Body requestBody: RequestBody) : Single<LoginResponseDto>
+    fun login(
+        @Body requestBody: RequestBody
+    ) : Single<LoginResponseDto>
 
-    /** 회원가입 */
-    @POST("member/join")
-    fun signUp(@Body requestBody: RequestBody) : Single<SignUpResponseDto>
+//    /** 임시 비밀번호 이메일 전송 */
+//    @POST("password")
+//    fun sendTempPassword(@Body requestBody: RequestBody) : Single<ResponseBody>
 
     /** 계정찾기 */
     @POST("password")
-    fun findAccount(@Body requestBody: RequestBody) : Single<FindAccountResponseDto>
+    fun findAccount(
+        @Body requestBody: RequestBody
+    ) : Single<FindAccountResponseDto>
+
+    /** 비밀번호 재설정 */
+    @PATCH("password")
+    fun changePassword(
+        @Body requestBody: RequestBody
+    ) : Single<ResponseBody>
+
+    /** 로그아웃 */
+    @POST("member/logout")
+    fun logout() : Single<ResponseBody>
 
     /** OAuth 로그인 */
     @GET("oauth/app/login/{provider}")
-    fun loginOauth(@Path("provider") provider: String) : Single<ResponseBody>
+    fun oauthLogin(
+        @Path("provider") provider: String,
+        @Query("code") code: String
+    ) : Single<ResponseBody>
 
-    /** OAuth 정보 요청 */
+    /** Oauth 정보를 서버로 보내 이미 회원인지 아닌지 판별 */
     @GET("oauth/user/{uid}")
-    fun requestOauthInfo(@Path("uid") uid: String) : Single<ResponseBody>
+    fun requestOauthInfo(
+        @Path("uid") uid: String,
+        @Query("type") type: String
+    ) : Single<ResponseBody>
 
     /** 멘션시 필요한 사용자 검색 */
     @GET("members")
-    fun searchMembers() : Single<ResponseBody>
-
-    /** 회원가입시 이메일 인증 */
-    @GET("members/email")
-    fun sendEmailAuth() : Single<ResponseBody>
-
-    /** Oauth 정보를 서버로 보내 이미 회원인지 아닌지 판별 */
-    @GET("oauth/user/{code}/?type=signup")
-    fun sendOauthSignUp(@Path("code") code: String) : Single<NewMemberResponseDto>
-    @GET("oauth/user/{code}/?type=callback")
-    fun sendOauthCallBack(@Path("code") code: String) : Single<ExistingMemberResponseDto>
+    fun searchMembers(
+        @Query("searchWord") searchWord: String,
+        @Query("limit") limit: Int
+    ) : Single<ResponseBody>
 
     /** 태그 제거*/
     @POST("tag/{tagId}")
-    fun deleteTag(@Path("tagId") tagId: String) : Single<ResponseBody>
+    fun deleteTag(
+        @Path("tagId") tagId: String
+    ) : Single<ResponseBody>
 
     /** 태그 생성 */
     @POST("tag/{resumeId}")
-    fun createTag(@Path("resumeId") resumeId: String) : Single<ResponseBody>
+    fun createTag(
+        @Path("resumeId") resumeId: String
+    ) : Single<ResponseBody>
 
     /** ME 이력서 조회 */
     @GET("resume?type=me")

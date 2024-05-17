@@ -6,21 +6,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
-import com.hocheol.respal.data.local.model.UserInfo
-import com.hocheol.respal.data.remote.model.ExistingMemberResponseDto
-import com.hocheol.respal.data.remote.model.SignUpResponseDto
-import com.hocheol.respal.data.remote.model.NewMemberResponseDto
 import com.hocheol.respal.repository.MainRepository
-import com.hocheol.respal.widget.utils.toJsonRequestBody
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -42,10 +36,9 @@ class MainViewModel @Inject constructor(
 
     fun openFragment(fragment: Fragment, data: JSONObject?, tag: String) {
         Log.e("Test", "[openView] tag = $tag")
-        var bundle: Bundle? = null
         if (data != null) {
             Log.e("Test", "bundle set = $data")
-            bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString("data", data.toString())
             fragment.arguments = bundle
         }
@@ -59,10 +52,9 @@ class MainViewModel @Inject constructor(
 
     fun replaceFragment(fragment: Fragment, data: JSONObject?, tag: String) {
         Log.e("Test", "[replaceFragment] tag = $tag")
-        var bundle: Bundle? = null
         if (data != null) {
             Log.e("Test", "bundle set = $data")
-            bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString("data", data.toString())
             fragment.arguments = bundle
         }
@@ -89,12 +81,12 @@ class MainViewModel @Inject constructor(
         _currentFragment.postValue(previousFragment)
     }
 
-    fun sendOauthCallBack(code: String, callback: (Boolean) -> Unit) {
+    fun requestOauthInfo(uid: String, type: String, callback: (Boolean) -> Unit) {
         coroutineScope.launch {
             try {
-                val response: ExistingMemberResponseDto = withContext(Dispatchers.IO) {
+                val response: ResponseBody = withContext(Dispatchers.IO) {
                     try {
-                        mainRepository.sendOauthCallBack(code).blockingGet()
+                        mainRepository.requestOauthInfo(uid, type).blockingGet()
                     } catch (e: HttpException) {
                         val errorCode = e.code()
                         Log.e(TAG, "HTTP Error Code: $errorCode")
@@ -102,16 +94,16 @@ class MainViewModel @Inject constructor(
                     }
                 }
                 Log.d("정철", response.toString())
-                sharedPreferenceStorage.saveUserInfo(
-                    UserInfo(
-                        response.result.userInfo.email,
-                        null,
-                        response.result.userInfo.image,
-                        response.result.userInfo.nickname,
-                        response.result.provider
-                    ))
-                sharedPreferenceStorage.saveAccessToken(response.result.accessToken)
-                sharedPreferenceStorage.saveRefreshToken(response.result.refreshToken)
+//                sharedPreferenceStorage.saveUserInfo(
+//                    UserInfo(
+//                        response.result.userInfo.email,
+//                        null,
+//                        response.result.userInfo.image,
+//                        response.result.userInfo.nickname,
+//                        response.result.provider
+//                    ))
+//                sharedPreferenceStorage.saveAccessToken(response.result.accessToken)
+//                sharedPreferenceStorage.saveRefreshToken(response.result.refreshToken)
                 callback(true)
             } catch (e: Exception) {
                 Log.d(TAG, e.printStackTrace().toString())
@@ -120,62 +112,62 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun sendOauthSignUp(code: String, callback: (Boolean) -> Unit) {
-        coroutineScope.launch {
-            try {
-                val response: NewMemberResponseDto = withContext(Dispatchers.IO) {
-                    try {
-                        mainRepository.sendOauthSignUp(code).blockingGet()
-                    } catch (e: HttpException) {
-                        val errorCode = e.code()
-                        Log.e(TAG, "HTTP Error Code: $errorCode")
-                        throw e
-                    }
-                }
-
-                val requestInput: HashMap<String, Any?> = HashMap()
-                requestInput["email"] = response.result.userInfo.email
-                requestInput["password"] = "temp1234!"
-                requestInput["picture"] = response.result.userInfo.image
-                requestInput["nickname"] = response.result.userInfo.nickname
-                requestInput["provider"] = response.result.provider
-
-                sharedPreferenceStorage.saveUserInfo(
-                    UserInfo(
-                        response.result.userInfo.email,
-                        "temp1234!",
-                        response.result.userInfo.image,
-                        response.result.userInfo.nickname,
-                        response.result.provider
-                    )
-                )
-
-                val gson = Gson()
-                Log.d(TAG, "Request JSON: ${gson.toJson(requestInput)}")
-
-                // Use async to execute this block concurrently
-                val response1Deferred = async(Dispatchers.IO) {
-                    try {
-                        mainRepository.signUp(requestInput.toJsonRequestBody()).blockingGet()
-                    } catch (e: HttpException) {
-                        val errorCode = e.code()
-                        Log.e(TAG, "HTTP Error Code: $errorCode")
-                        throw e
-                    }
-                }
-
-                // Wait for the result of the async block
-                val response1: SignUpResponseDto = response1Deferred.await()
-
-//                sharedPreferenceStorage.saveAccessToken(response1.result.accessToken)
-//                sharedPreferenceStorage.saveRefreshToken(response1.result.refreshToken)
-                callback(true)
-            } catch (e: Exception) {
-                Log.d(TAG, e.printStackTrace().toString())
-                callback(false)
-            }
-        }
-    }
+//    fun sendOauthSignUp(code: String, callback: (Boolean) -> Unit) {
+//        coroutineScope.launch {
+//            try {
+//                val response: NewMemberResponseDto = withContext(Dispatchers.IO) {
+//                    try {
+//                        mainRepository.oauthSignUp(code).blockingGet()
+//                    } catch (e: HttpException) {
+//                        val errorCode = e.code()
+//                        Log.e(TAG, "HTTP Error Code: $errorCode")
+//                        throw e
+//                    }
+//                }
+//
+//                val requestInput: HashMap<String, Any?> = HashMap()
+//                requestInput["email"] = response.result.userInfo.email
+//                requestInput["password"] = "temp1234!"
+//                requestInput["picture"] = response.result.userInfo.image
+//                requestInput["nickname"] = response.result.userInfo.nickname
+//                requestInput["provider"] = response.result.provider
+//
+//                sharedPreferenceStorage.saveUserInfo(
+//                    UserInfo(
+//                        response.result.userInfo.email,
+//                        "temp1234!",
+//                        response.result.userInfo.image,
+//                        response.result.userInfo.nickname,
+//                        response.result.provider
+//                    )
+//                )
+//
+//                val gson = Gson()
+//                Log.d(TAG, "Request JSON: ${gson.toJson(requestInput)}")
+//
+//                // Use async to execute this block concurrently
+//                val response1Deferred = async(Dispatchers.IO) {
+//                    try {
+//                        mainRepository.signUp(requestInput.toJsonRequestBody()).blockingGet()
+//                    } catch (e: HttpException) {
+//                        val errorCode = e.code()
+//                        Log.e(TAG, "HTTP Error Code: $errorCode")
+//                        throw e
+//                    }
+//                }
+//
+//                // Wait for the result of the async block
+//                val response1: SignUpResponseDto = response1Deferred.await()
+//
+////                sharedPreferenceStorage.saveAccessToken(response1.result.accessToken)
+////                sharedPreferenceStorage.saveRefreshToken(response1.result.refreshToken)
+//                callback(true)
+//            } catch (e: Exception) {
+//                Log.d(TAG, e.printStackTrace().toString())
+//                callback(false)
+//            }
+//        }
+//    }
 
 //    fun sendOauthSignUp(code: String) = mainRepository.sendOauthSignUp(code)
 //        .subscribeOn(Schedulers.io())
