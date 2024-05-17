@@ -1,6 +1,5 @@
 package com.hocheol.respal.view
 
-import android.util.Log
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.hocheol.respal.R
@@ -24,14 +23,27 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     private val viewModel by viewModels<LoginViewModel>()
 
     override fun init() {
-        binding.idInputText // TODO
+        binding.emailInputText // TODO
         binding.pwInputText // TODO
         binding.findAccountBtn.setOnSingleClickListener {
             mainViewModel.replaceFragment(FindAccountFragment(), null, FIND_ACCOUNT_FRAGMENT_TAG)
         }
         binding.loginBtn.setOnSingleClickListener {
-//            if () 로그인 성공 시 replace 하도록 변경
-            mainViewModel.replaceFragment(MyResumeFragment(), null, MY_RESUME_FRAGMENT_TAG)
+            val inputEmail = binding.emailInputText.text.toString()
+            val inputPw = binding.pwInputText.text.toString()
+            if (inputEmail.isEmpty() || inputPw.isEmpty()) {
+                return@setOnSingleClickListener
+            }
+            viewModel.commonLogin(inputEmail, inputPw) {
+                activity?.runOnUiThread {
+                    if (it) {
+                        shortShowToast("Login Success")
+                        mainViewModel.replaceFragment(MyResumeFragment(), null, MY_RESUME_FRAGMENT_TAG)
+                    } else {
+                        shortShowToast("Login Failed")
+                    }
+                }
+            }
         }
         binding.signUpBtn.setOnSingleClickListener {
             mainViewModel.replaceFragment(SignUpFragment(), null, SIGN_UP_FRAGMENT_TAG)

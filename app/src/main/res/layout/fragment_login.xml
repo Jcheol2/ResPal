@@ -124,7 +124,7 @@
 
         <TextView
             android:layout_marginTop="10dp"
-            android:text="아이디"
+            android:text="이메일"
             android:textSize="12sp"
             android:textColor="@color/color_black"
             android:textStyle="bold"
@@ -133,8 +133,10 @@
             android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/id_input_text"
+            android:id="@+id/email_input_text"
             android:inputType="text"
+            android:hint="example@example.com"
+            android:textSize="14sp"
             android:background="@drawable/background_text_acacac"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
@@ -157,6 +159,8 @@
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/pw_input_text"
             android:inputType="textPassword"
+            android:hint="비밀번호 입력(문자, 숫자, 특수문자 포함 8~20자)"
+            android:textSize="14sp"
             android:background="@drawable/background_text_acacac"
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"

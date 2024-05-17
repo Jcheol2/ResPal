@@ -37,7 +37,6 @@ class LoginViewModel @Inject constructor(
                 val loginInput: HashMap<String, Any> = HashMap()
                 loginInput["email"] = inputEmail
                 loginInput["password"] = inputPw
-                Log.d(TAG, "loginInput : $loginInput")
                 val response: LoginResponseDto = withContext(Dispatchers.IO) {
                     try {
                         mainRepository.login(loginInput.toJsonRequestBody()).blockingGet()
@@ -55,7 +54,7 @@ class LoginViewModel @Inject constructor(
                         inputPw,
                         "",
                         "",
-                        ""
+                        "common"
                     )
                 )
                 loginCallback(true)
