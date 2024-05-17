@@ -1,5 +1,6 @@
 package com.hocheol.respal.view
 
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -22,13 +23,26 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
     override fun init() {
         val userInfo = viewModel.getUserInfo()
         if (userInfo != null) {
+            val profilePhoto = userInfo.picture.ifEmpty {
+                ContextCompat.getDrawable(requireActivity(), R.drawable.ic_user)
+            }
+            val nickname = userInfo.nickname.ifEmpty {
+                userInfo.email
+            }
             Glide.with(this)
-                .load(userInfo.picture)
+                .load(profilePhoto)
                 .into(binding.profileIconImage)
-            binding.profileUserNameText.text = userInfo.nickname
+            binding.profileUserNameText.text = nickname
         }
-//        viewModel.getTest()
-//        viewModel.findResume()
+        viewModel.findResume {
+            activity?.runOnUiThread {
+                if (it) {
+                    shortShowToast("findResume Success")
+                } else {
+                    shortShowToast("findResume Failed")
+                }
+            }
+        }
         binding.editProfileBtn
         binding.myCvBtn.setOnSingleClickListener {
             if (btnState != "myCv") {
