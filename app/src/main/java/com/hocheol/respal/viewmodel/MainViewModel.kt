@@ -167,8 +167,8 @@ class MainViewModel @Inject constructor(
                 // Wait for the result of the async block
                 val response1: SignUpResponseDto = response1Deferred.await()
 
-                sharedPreferenceStorage.saveAccessToken(response1.result.accessToken)
-                sharedPreferenceStorage.saveRefreshToken(response1.result.refreshToken)
+//                sharedPreferenceStorage.saveAccessToken(response1.result.accessToken)
+//                sharedPreferenceStorage.saveRefreshToken(response1.result.refreshToken)
                 callback(true)
             } catch (e: Exception) {
                 Log.d(TAG, e.printStackTrace().toString())

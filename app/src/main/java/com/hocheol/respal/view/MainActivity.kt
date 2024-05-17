@@ -33,6 +33,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 binding.bottomNavView.visibility = View.GONE
                 binding.frameLayout.visibility = View.VISIBLE
                 binding.viewPager.visibility = View.GONE
+                binding.viewPager.currentItem = 0 // viewPager 초기화
             } else {
                 binding.frameLayout.visibility = View.GONE
                 binding.viewPager.visibility = View.VISIBLE
