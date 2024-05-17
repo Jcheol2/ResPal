@@ -1,10 +1,8 @@
 package com.hocheol.respal.di
 
-import android.util.Log
 import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.remote.api.RespalApi
 import com.hocheol.respal.data.remote.api.TokenAuthenticator
-import com.hocheol.respal.repository.MainRepository
 import com.hocheol.respal.widget.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -43,24 +41,18 @@ object NetworkModule {
             if (!accessToken.isNullOrBlank()) {
                 requestBuilder.addHeader("Authorization", "Bearer $accessToken")
             }
-            val headers = requestBuilder.build().headers.toString()
-            Log.d("Request Headers", headers)
-
             val request = requestBuilder.build()
-            Log.d("Request", request.toString()) // 요청 로그 출력
             chain.proceed(request)
         }
-//        val tokenAuthenticator = provideTokenAuthenticator(
-//            mainRepository,
-//            sharedPreferenceStorage
-//        )
+        val tokenAuthenticator = provideTokenAuthenticator(sharedPreferenceStorage)
+
         return OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(15, TimeUnit.SECONDS)
             .addInterceptor(getLoggingInterceptor())
             .apply {
-                // SSL 인증을 건너뛰는 코드
+                // SSL 인증을 우회 (임시)
                 try {
                     val trustAllCerts: Array<TrustManager> = arrayOf(
                         object : X509TrustManager {
@@ -80,7 +72,7 @@ object NetworkModule {
                 }
             }
             .addInterceptor(interceptor) // 헤더에 토큰 넣는 로직
-//            .authenticator(tokenAuthenticator) // 토큰 만료 시 새로 받는 로직
+            .authenticator(tokenAuthenticator) // 토큰 만료 시 새로 받는 로직
             .build()
     }
 
@@ -98,14 +90,12 @@ object NetworkModule {
             .build()
     }
 
-
     @Provides
     @Singleton
     fun provideTokenAuthenticator(
-        mainRepository: MainRepository,
         sharedPreferenceStorage: SharedPreferenceStorage
     ): TokenAuthenticator {
-        return TokenAuthenticator(mainRepository, sharedPreferenceStorage)
+        return TokenAuthenticator(sharedPreferenceStorage)
     }
 
     @Provides
@@ -113,7 +103,6 @@ object NetworkModule {
     fun provideConverterFactory(): GsonConverterFactory {
         return GsonConverterFactory.create()
     }
-
 
     private fun getLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }

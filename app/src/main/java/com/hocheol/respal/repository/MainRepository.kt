@@ -14,7 +14,6 @@ class MainRepository @Inject constructor(
     fun logout() = respalApi.logout()
     fun findAccount(requestBody: RequestBody) = respalApi.findAccount(requestBody)
     fun test() = respalApi.test()
-    fun reAuth(refreshToken: String) = respalApi.reAuth(refreshToken)
     fun findMyResume() = respalApi.findMyResume()
     fun findHubResume() = respalApi.findHubResume()
     fun findTagResume() = respalApi.findTagResume()

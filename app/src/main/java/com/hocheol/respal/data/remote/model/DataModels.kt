@@ -64,13 +64,3 @@ data class FindAccountResponseDto(
     val statusCode: Int,
     val result: String
 )
-
-data class RefreshTokenResponseDto(
-    val statusCode: Int,
-    val result: RefreshTokenResultDto
-
-)
-data class RefreshTokenResultDto(
-    val message: String,
-    val accessToken: String
-)

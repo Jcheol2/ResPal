@@ -35,10 +35,6 @@ interface RespalApi {
     @POST("password")
     fun findAccount(@Body requestBody: RequestBody) : Single<FindAccountResponseDto>
 
-    /** Access Token 재발급 */
-    @POST("jwt/refresh")
-    fun reAuth(@Header("Authorization") refreshToken: String): Single<RefreshTokenResponseDto>
-
     /** OAuth 로그인 */
     @GET("oauth/app/login/{provider}")
     fun loginOauth(@Path("provider") provider: String) : Single<ResponseBody>

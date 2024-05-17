@@ -2,17 +2,16 @@ package com.hocheol.respal.data.remote.api
 
 import android.util.Log
 import com.hocheol.respal.data.local.SharedPreferenceStorage
-import com.hocheol.respal.data.remote.model.RefreshTokenResponseDto
-import com.hocheol.respal.repository.MainRepository
+import com.hocheol.respal.widget.utils.Constants.BASE_URL
 import kotlinx.coroutines.runBlocking
-import okhttp3.Authenticator
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.Route
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import org.json.JSONObject
 import javax.inject.Inject
 
 class TokenAuthenticator @Inject constructor(
-    private val mainRepository: MainRepository,
+    // 주입 순서 때문에 MainRepository 넣을 경우 에러 발생
+    /*private val mainRepository: MainRepository,*/
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : Authenticator {
     private val TAG = this.javaClass.simpleName
@@ -21,13 +20,14 @@ class TokenAuthenticator @Inject constructor(
         if (isRefreshingToken) {
             Log.d(TAG, "이미 토큰 재발행 시도 중 .. 이번 요청 무시")
             return null
+        } else {
+            Log.d(TAG, "토큰 재발행 시작 ..")
+            isRefreshingToken = true
         }
 
-        isRefreshingToken = true
-        Log.d(TAG, "토큰 재발행 시도 중 ..")
         return if (fetchNewAccessToken()) {
+            Log.d(TAG, "토큰 재발행 성공 !!")
             val newAccessToken = sharedPreferenceStorage.getAccessToken()
-            Log.d(TAG, "토큰 재발행 성공!! : $newAccessToken")
             response.request.newBuilder()
                 .header("Authorization", "Bearer $newAccessToken")
                 .build()
@@ -40,33 +40,33 @@ class TokenAuthenticator @Inject constructor(
     private fun fetchNewAccessToken(): Boolean {
         return runBlocking {
             try {
-                sharedPreferenceStorage.saveAccessToken("")
-                if (sharedPreferenceStorage.getRefreshToken() != null) {
-                    val response = sendServer(sharedPreferenceStorage.getRefreshToken()!!)
-                    if (response != null) {
-                        sharedPreferenceStorage.saveAccessToken(response.result.accessToken)
-                        true
-                    } else {
-                        false
+                val refreshToken = sharedPreferenceStorage.getRefreshToken()
+                val client = OkHttpClient()
+
+                val request = Request.Builder()
+                    .url("$BASE_URL/jwt/refresh")
+                    .header("Authorization", "Bearer $refreshToken")
+                    .post(RequestBody.create("application/json".toMediaTypeOrNull(), "{}"))
+                    .build()
+
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    val responseBody = response.body?.string()
+                    if (responseBody != null) {
+                        val jsonResponse = JSONObject(responseBody)
+                        val result = jsonResponse.getJSONObject("result")
+                        val newAccessToken = result.getString("accessToken")
+                        sharedPreferenceStorage.saveAccessToken(newAccessToken)
+                        return@runBlocking true
                     }
                 } else {
-                    false
+                    Log.e(TAG, "토큰 갱신 실패: ${response.code}")
                 }
             } catch (e: Exception) {
+                Log.e(TAG, "토큰 갱신 중 오류 발생: ${e.message}")
                 e.printStackTrace()
-                false
             }
+            return@runBlocking false
         }
-    }
-
-    private fun sendServer(refreshToken: String): RefreshTokenResponseDto? {
-        try {
-            val response = mainRepository.reAuth(refreshToken)
-            return response.blockingGet()
-        } catch (e: Exception) {
-            Log.e(TAG, "Exception occurred: ${e.message}")
-            e.printStackTrace()
-        }
-        return null
     }
 }
