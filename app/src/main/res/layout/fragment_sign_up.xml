@@ -128,51 +128,7 @@
 
             <TextView
                 android:layout_marginTop="20dp"
-                android:text="아이디"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="@color/color_black"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/id_input_text"
-                android:inputType="text"
-                android:background="@drawable/background_text_acacac"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"/>
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:text="비밀번호"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="@color/color_black"
-                android:layout_marginStart="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/pw_input_text"
-                android:inputType="textPassword"
-                android:background="@drawable/background_text_acacac"
-                android:layout_marginTop="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"/>
-
-            <TextView
-                android:layout_marginTop="10dp"
-                android:text="이메일"
+                android:text="* 이메일"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@color/color_black"
@@ -183,6 +139,8 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/email_input_text"
                 android:inputType="text"
+                android:hint="example@example.com"
+                android:textSize="14sp"
                 android:background="@drawable/background_text_acacac"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
@@ -194,7 +152,7 @@
 
             <TextView
                 android:layout_marginTop="10dp"
-                android:text="직무"
+                android:text="* 비밀번호"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@color/color_black"
@@ -202,9 +160,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
-            <Spinner
-                android:id="@+id/job_spinner"
-                android:background="@drawable/background_spinner"
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/pw_input_text"
+                android:inputType="textPassword"
+                android:hint="비밀번호 입력(문자, 숫자, 특수문자 포함 8~20자)"
+                android:textSize="14sp"
+                android:background="@drawable/background_text_acacac"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"/>
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="* 비밀번호 확인"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_black"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/pw_confirm_input_text"
+                android:inputType="textPassword"
+                android:hint="다시 한번 입력해 주세요."
+                android:textSize="14sp"
+                android:background="@drawable/background_text_acacac"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
@@ -226,6 +211,8 @@
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/nick_name_input_text"
                 android:inputType="text"
+                android:hint="닉네임"
+                android:textSize="14sp"
                 android:background="@drawable/background_text_acacac"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
@@ -234,6 +221,46 @@
                 android:paddingEnd="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"/>
+
+            <TextView
+                android:layout_marginTop="10dp"
+                android:text="프로필 사진"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_black"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/post_photo_btn"
+                    android:text="사진 등록"
+                    android:textColor="@color/color_black"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/background_button_bdbdbd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <View
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/post_photo_text"
+                    android:text="사진이 등록되지 않았습니다."
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_marginTop="20dp"

@@ -19,17 +19,16 @@ class SignUpViewModel @Inject constructor(
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
     private var TAG = this.javaClass.simpleName
-    fun signUp(inputEmail: String, inputPassword: String, inputNickname: String, inputPicture: String,
+    fun signUp(inputEmail: String, inputPassword: String, inputNickname: String, inputPhoto: String,
                signUpCallback: (Boolean) -> Unit) {
         coroutineScope.launch {
             try {
                 val signUpInput: HashMap<String, Any?> = HashMap()
                 signUpInput["email"] = inputEmail
                 signUpInput["password"] = inputPassword
-                signUpInput["picture"] = inputNickname
-                signUpInput["nickname"] = inputPicture
+                signUpInput["picture"] = inputPhoto
+                signUpInput["nickname"] = inputNickname
                 signUpInput["provider"] = "common"
-                Log.d(TAG, "signUpInput : $signUpInput")
                 val response: SignUpResponseDto = withContext(Dispatchers.IO) {
                     try {
                         mainRepository.signUp(signUpInput.toJsonRequestBody()).blockingGet()
