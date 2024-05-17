@@ -26,7 +26,6 @@ class FindAccountViewModel @Inject constructor(
                 val findAccountInput: HashMap<String, Any> = HashMap()
                 findAccountInput["email"] = inputEmail
                 findAccountInput["tmpPassword"] = inputTmpPw
-                Log.d(TAG, "findAccountInput : $findAccountInput")
                 val response: FindAccountResponseDto = withContext(Dispatchers.IO) {
                     try {
                         mainRepository.findAccount(findAccountInput.toJsonRequestBody()).blockingGet()
