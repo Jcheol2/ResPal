@@ -3,10 +3,10 @@ package com.hocheol.respal.view
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseFragment
 import com.hocheol.respal.databinding.FragmentMyResumeBinding
+import com.hocheol.respal.di.GlideApp
 import com.hocheol.respal.viewmodel.MainViewModel
 import com.hocheol.respal.viewmodel.MyResumeViewModel
 import com.hocheol.respal.widget.utils.setOnSingleClickListener
@@ -25,7 +25,7 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
             val profilePhoto = userInfo.picture.ifEmpty {
                 ContextCompat.getDrawable(requireActivity(), R.drawable.ic_user)
             }
-            Glide.with(this)
+            GlideApp.with(this@MyResumeFragment)
                 .load(profilePhoto)
                 .into(binding.profileIconImage)
             val nickname = userInfo.nickname.ifEmpty {
