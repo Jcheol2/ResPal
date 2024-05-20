@@ -19,6 +19,7 @@ import com.hocheol.respal.widget.utils.SingleLiveEvent
 import com.hocheol.respal.widget.utils.toJsonRequestBody
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -32,6 +33,10 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel() {
     private val _responseEvent = SingleLiveEvent<Pair<String, Boolean>>()
     val responseEvent: LiveData<Pair<String, Boolean>> get() = _responseEvent
+
+    fun getUserInfo(): UserInfo? {
+        return runBlocking { dataStoreStorage.getUserInfo().firstOrNull() }
+    }
 
     fun commonLogin(inputEmail: String, inputPw: String) {
         coroutineScope.launch {
