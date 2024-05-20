@@ -11,21 +11,26 @@ import com.hocheol.respal.databinding.FragmentFindAccountBinding
 import com.hocheol.respal.viewmodel.FindAccountViewModel
 import com.hocheol.respal.viewmodel.MainViewModel
 import com.hocheol.respal.widget.utils.Constants.LOGIN_FRAGMENT_TAG
+import com.hocheol.respal.widget.utils.isValidEmail
 import com.hocheol.respal.widget.utils.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FindAccountFragment : BaseFragment<FragmentFindAccountBinding>(R.layout.fragment_find_account) {
-    private var TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName
 
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<FindAccountViewModel>()
 
     override fun init() {
         binding.findAccountBtn.setOnSingleClickListener {
-//            if () 계정 찾기 실패 시 visible 하도록 변경
             val emailAddress = binding.emailInputText.text.toString()
-            binding.findAccountFailedView.visibility = View.VISIBLE
+            if (!isValidEmail(emailAddress)) {
+                shortShowToast("Invalid email format")
+                binding.findAccountFailedView.visibility = View.VISIBLE
+                return@setOnSingleClickListener
+            }
+            viewModel.findAccount(emailAddress, "tmpPassword")
         }
         binding.cancelBtn.setOnSingleClickListener {
             mainViewModel.replaceFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
@@ -44,5 +49,20 @@ class FindAccountFragment : BaseFragment<FragmentFindAccountBinding>(R.layout.fr
             }
         }
         binding.emailInputText.addTextChangedListener(textWatcher)
+        initObserve()
+    }
+
+    private fun initObserve() {
+        viewModel.responseEvent.observe(viewLifecycleOwner) { success ->
+            when (success.first) {
+                "findAccount" -> {
+                    if (success.second) {
+                        shortShowToast("findAccount Success")
+                    } else {
+                        shortShowToast("findAccount Failed")
+                    }
+                }
+            }
+        }
     }
 }

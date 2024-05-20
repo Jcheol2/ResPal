@@ -30,6 +30,9 @@ class MainViewModel @Inject constructor(
     private val _currentFragment = MutableLiveData<Fragment?>()
     val currentFragment: LiveData<Fragment?> = _currentFragment
 
+    private val _currentViewPagerPosition = MutableLiveData<Int>()
+    val currentViewPagerPosition: LiveData<Int> = _currentViewPagerPosition
+
     fun init(sfm: FragmentManager) {
         supportFragmentManager = sfm
     }
@@ -81,12 +84,16 @@ class MainViewModel @Inject constructor(
         _currentFragment.postValue(previousFragment)
     }
 
+    fun onPageSelected(position: Int) {
+        _currentViewPagerPosition.postValue(position)
+    }
+
     fun requestOauthInfo(uid: String, type: String, callback: (Boolean) -> Unit) {
         coroutineScope.launch {
             try {
                 val response: ResponseBody = withContext(Dispatchers.IO) {
                     try {
-                        mainRepository.requestOauthInfo(uid, type).blockingGet()
+                        mainRepository.requestOauthInfo(uid, type)
                     } catch (e: HttpException) {
                         val errorCode = e.code()
                         Log.e(TAG, "HTTP Error Code: $errorCode")

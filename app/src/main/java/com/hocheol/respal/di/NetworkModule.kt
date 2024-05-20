@@ -4,6 +4,7 @@ import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.remote.api.RespalApi
 import com.hocheol.respal.data.remote.api.TokenAuthenticator
 import com.hocheol.respal.widget.utils.Constants.BASE_URL
+import com.hocheol.respal.widget.utils.SynchronousCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -85,7 +86,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(SynchronousCallAdapterFactory.create())
             .addConverterFactory(gsonConverterFactory)
             .build()
     }

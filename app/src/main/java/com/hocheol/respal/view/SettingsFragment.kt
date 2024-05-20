@@ -13,7 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingsFragment: BaseFragment<FragmentSettingsBinding>(R.layout.fragment_settings) {
-    private var TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName
 
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<SettingsViewModel>()
@@ -27,12 +27,16 @@ class SettingsFragment: BaseFragment<FragmentSettingsBinding>(R.layout.fragment_
     }
 
     private fun initObserve() {
-        viewModel.logoutResponse.observe(viewLifecycleOwner) { success ->
-            if (success) {
-                shortShowToast("Logout Success")
-                mainViewModel.replaceFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
-            } else {
-                shortShowToast("Logout Failed")
+        viewModel.responseEvent.observe(viewLifecycleOwner) { success ->
+            when (success.first) {
+                "logout" -> {
+                    if (success.second) {
+                        shortShowToast("Logout Success")
+                        mainViewModel.replaceFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
+                    } else {
+                        shortShowToast("Logout Failed")
+                    }
+                }
             }
         }
     }

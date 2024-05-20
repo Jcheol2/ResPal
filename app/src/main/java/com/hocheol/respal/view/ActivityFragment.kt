@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ActivityFragment: BaseFragment<FragmentActivityBinding>(R.layout.fragment_activity) {
-    private var TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName
 
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<ActivityViewModel>()

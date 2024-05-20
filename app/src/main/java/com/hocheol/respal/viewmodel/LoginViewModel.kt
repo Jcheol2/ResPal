@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.LiveData
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
@@ -14,6 +15,7 @@ import com.hocheol.respal.repository.MainRepository
 import com.hocheol.respal.widget.utils.Constants.GITHUB
 import com.hocheol.respal.widget.utils.Constants.GOOGLE
 import com.hocheol.respal.widget.utils.Constants.KAKAO
+import com.hocheol.respal.widget.utils.SingleLiveEvent
 import com.hocheol.respal.widget.utils.toJsonRequestBody
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -28,24 +30,22 @@ class LoginViewModel @Inject constructor(
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
     private val TAG = this.javaClass.simpleName
+    private val _responseEvent = SingleLiveEvent<Pair<String, Boolean>>()
+    val responseEvent: LiveData<Pair<String, Boolean>> get() = _responseEvent
 
-    fun commonLogin(inputEmail: String, inputPw: String,
-                    loginCallback: (Boolean) -> Unit) {
+    fun commonLogin(inputEmail: String, inputPw: String) {
         sharedPreferenceStorage.saveAccessToken("")
         coroutineScope.launch {
             try {
-                val loginInput: HashMap<String, Any> = HashMap()
-                loginInput["email"] = inputEmail
-                loginInput["password"] = inputPw
+                val loginInput: HashMap<String, Any> = hashMapOf(
+                    "email" to inputEmail,
+                    "password" to inputPw
+                )
+
                 val response: LoginResponseDto = withContext(Dispatchers.IO) {
-                    try {
-                        mainRepository.login(loginInput.toJsonRequestBody()).blockingGet()
-                    } catch (e: HttpException) {
-                        val errorCode = e.code()
-                        Log.e(TAG, "HTTP Error Code: $errorCode")
-                        throw e
-                    }
+                    mainRepository.login(loginInput.toJsonRequestBody())
                 }
+
                 sharedPreferenceStorage.saveAccessToken(response.result.accessToken)
                 sharedPreferenceStorage.saveRefreshToken(response.result.refreshToken)
                 sharedPreferenceStorage.saveUserInfo(
@@ -57,10 +57,14 @@ class LoginViewModel @Inject constructor(
                         "common"
                     )
                 )
-                loginCallback(true)
+                _responseEvent.postValue(Pair("commonLogin", true))
+            } catch (e: HttpException) {
+                val errorCode = e.code()
+                Log.e(TAG, "HTTP Error Code: $errorCode")
+                _responseEvent.postValue(Pair("commonLogin", false))
             } catch (e: Exception) {
                 Log.d(TAG, e.printStackTrace().toString())
-                loginCallback(false)
+                _responseEvent.postValue(Pair("commonLogin", false))
             }
         }
     }

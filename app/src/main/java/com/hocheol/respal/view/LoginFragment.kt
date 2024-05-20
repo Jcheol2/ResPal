@@ -13,12 +13,13 @@ import com.hocheol.respal.widget.utils.Constants.GOOGLE
 import com.hocheol.respal.widget.utils.Constants.KAKAO
 import com.hocheol.respal.widget.utils.Constants.MY_RESUME_FRAGMENT_TAG
 import com.hocheol.respal.widget.utils.Constants.SIGN_UP_FRAGMENT_TAG
+import com.hocheol.respal.widget.utils.Constants.VIEW_PAGER_FRAGMENT_TAG
 import com.hocheol.respal.widget.utils.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
-    private var TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<LoginViewModel>()
 
@@ -34,16 +35,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
             if (inputEmail.isEmpty() || inputPw.isEmpty()) {
                 return@setOnSingleClickListener
             }
-            viewModel.commonLogin(inputEmail, inputPw) {
-                activity?.runOnUiThread {
-                    if (it) {
-                        shortShowToast("Login Success")
-                        mainViewModel.replaceFragment(MyResumeFragment(), null, MY_RESUME_FRAGMENT_TAG)
-                    } else {
-                        shortShowToast("Login Failed")
-                    }
-                }
-            }
+            viewModel.commonLogin(inputEmail, inputPw)
         }
         binding.signUpBtn.setOnSingleClickListener {
             mainViewModel.replaceFragment(SignUpFragment(), null, SIGN_UP_FRAGMENT_TAG)
@@ -56,6 +48,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
         binding.kakaoLoginBtn.setOnSingleClickListener {
             viewModel.signInOauth(requireContext(), KAKAO)
+        }
+        initObserve()
+    }
+
+    private fun initObserve() {
+        viewModel.responseEvent.observe(viewLifecycleOwner) { success ->
+            when (success.first) {
+                "commonLogin" -> {
+                    if (success.second) {
+                        shortShowToast("Login Success")
+                        mainViewModel.replaceFragment(ViewPagerFragment(), null, VIEW_PAGER_FRAGMENT_TAG)
+                    } else {
+                        shortShowToast("Login Failed")
+                    }
+                }
+            }
         }
     }
 }

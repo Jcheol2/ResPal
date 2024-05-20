@@ -1,10 +1,12 @@
 package com.hocheol.respal.viewmodel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.remote.model.FindAccountResponseDto
 import com.hocheol.respal.repository.MainRepository
+import com.hocheol.respal.widget.utils.SingleLiveEvent
 import com.hocheol.respal.widget.utils.toJsonRequestBody
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,27 +20,30 @@ class FindAccountViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
-    private var TAG = this.javaClass.simpleName
-    fun findAccount(inputEmail: String, inputTmpPw: String,
-                    findAccountCallback: (Boolean) -> Unit) {
+    private val TAG = this.javaClass.simpleName
+    private val _responseEvent = SingleLiveEvent<Pair<String, Boolean>>()
+    val responseEvent: LiveData<Pair<String, Boolean>> get() = _responseEvent
+
+    fun findAccount(inputEmail: String, inputTmpPw: String) {
         coroutineScope.launch {
             try {
-                val findAccountInput: HashMap<String, Any> = HashMap()
-                findAccountInput["email"] = inputEmail
-                findAccountInput["tmpPassword"] = inputTmpPw
+                val findAccountInput: HashMap<String, Any> = hashMapOf(
+                    "email" to inputEmail,
+                    "tmpPassword" to inputTmpPw
+                )
+
                 val response: FindAccountResponseDto = withContext(Dispatchers.IO) {
-                    try {
-                        mainRepository.findAccount(findAccountInput.toJsonRequestBody()).blockingGet()
-                    } catch (e: HttpException) {
-                        val errorCode = e.code()
-                        Log.e(TAG, "HTTP Error Code: $errorCode")
-                        throw e
-                    }
+                    mainRepository.findAccount(findAccountInput.toJsonRequestBody())
                 }
-                findAccountCallback(true)
+
+                _responseEvent.postValue(Pair("findAccount", true))
+            } catch (e: HttpException) {
+                val errorCode = e.code()
+                Log.e(TAG, "HTTP Error Code: $errorCode")
+                _responseEvent.postValue(Pair("findAccount", false))
             } catch (e: Exception) {
                 Log.d(TAG, e.printStackTrace().toString())
-                findAccountCallback(false)
+                _responseEvent.postValue(Pair("findAccount", false))
             }
         }
     }

@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_my_resume) {
-    private var TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName
 
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<MyResumeViewModel>()
@@ -29,19 +29,14 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
             Glide.with(this)
                 .load(profilePhoto)
                 .into(binding.profileIconImage)
-            binding.profileUserNameText.text = userInfo.nickname
-        }
-        viewModel.findResume {
-            activity?.runOnUiThread {
-                if (it) {
-                    shortShowToast("findResume Success")
-                } else {
-                    shortShowToast("findResume Failed")
-                }
+            val nickname = userInfo.nickname.ifEmpty {
+                userInfo.email.split("@")[0]
             }
+            binding.profileUserNameText.text = nickname
         }
         binding.editProfileBtn
         binding.myCvBtn.setOnSingleClickListener {
+            viewModel.findResume()
             if (btnState != "myCv") {
                 binding.myCvBtn.setTextColor(resources.getColor(R.color.color_white))
                 binding.myCvBtn.setBackgroundResource(R.drawable.background_button_6d4acd)
@@ -60,5 +55,20 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
             }
         }
         binding.cvRecyclerView // TODO
+        initObserve()
+    }
+
+    private fun initObserve() {
+        viewModel.responseEvent.observe(viewLifecycleOwner) { success ->
+            when (success.first) {
+                "findResume" -> {
+                    if (success.second) {
+                        shortShowToast("findResume Success")
+                    } else {
+                        shortShowToast("findResume Failed")
+                    }
+                }
+            }
+        }
     }
 }

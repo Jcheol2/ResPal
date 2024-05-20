@@ -1,16 +1,17 @@
 package com.hocheol.respal.viewmodel
 
 import android.util.Log
-import com.google.gson.JsonObject
+import androidx.lifecycle.LiveData
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.local.model.UserInfo
 import com.hocheol.respal.repository.MainRepository
+import com.hocheol.respal.widget.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.ResponseBody
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -19,37 +20,28 @@ class MyResumeViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
-    private var TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName
+    private val _responseEvent = SingleLiveEvent<Pair<String, Boolean>>()
+    val responseEvent: LiveData<Pair<String, Boolean>> get() = _responseEvent
 
     fun getUserInfo(): UserInfo? {
         return sharedPreferenceStorage.getUserInfo()
     }
 
-    fun getTest() = mainRepository.test()
-        .subscribeOn(Schedulers.io())
-        .observeOn(Schedulers.io())
-        .subscribe({ response ->
-            println(response)
-        }, { e ->
-            println(e.toString())
-        })
-
-    fun findResume(findResumeCallback: (Boolean) -> Unit) {
+    fun findResume() {
         coroutineScope.launch {
             try {
-                val response: JsonObject = withContext(Dispatchers.IO) {
-                    try {
-                        mainRepository.findMyResume().blockingGet()
-                    } catch (e: HttpException) {
-                        val errorCode = e.code()
-                        Log.e(TAG, "HTTP Error Code: $errorCode")
-                        throw e
-                    }
+                val response: ResponseBody = withContext(Dispatchers.IO) {
+                    mainRepository.findMyResume()
                 }
-                findResumeCallback(true)
+                _responseEvent.postValue(Pair("findResume", true))
+            } catch (e: HttpException) {
+                val errorCode = e.code()
+                Log.e(TAG, "HTTP Error Code: $errorCode")
+                _responseEvent.postValue(Pair("findResume", false))
             } catch (e: Exception) {
                 Log.d(TAG, e.printStackTrace().toString())
-                findResumeCallback(false)
+                _responseEvent.postValue(Pair("findResume", false))
             }
         }
     }

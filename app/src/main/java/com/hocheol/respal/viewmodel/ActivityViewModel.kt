@@ -11,6 +11,6 @@ class ActivityViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
-    private var TAG = this.javaClass.simpleName
+    private val TAG = this.javaClass.simpleName
 
 }

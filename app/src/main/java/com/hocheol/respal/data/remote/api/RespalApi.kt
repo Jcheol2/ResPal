@@ -9,25 +9,25 @@ import retrofit2.http.*
 
 interface RespalApi {
     @GET("test")
-    fun test() : Single<JsonObject>
+    suspend fun test() : JsonObject
 
     /** 회원가입 */
     @POST("member/join")
-    fun signUp(
+    suspend fun signUp(
         @Body requestBody: RequestBody
-    ) : Single<SignUpResponseDto>
+    ) : SignUpResponseDto
 
     /** 회원가입시 이메일 인증 */
     @GET("member/email")
-    fun emailAuth(
+    suspend fun emailAuth(
         @Query("email") inputEmail: String
-    ) : Single<ResponseBody>
+    ) : ResponseBody
 
     /** 로그인 */
     @POST("member/login")
-    fun login(
+    suspend fun login(
         @Body requestBody: RequestBody
-    ) : Single<LoginResponseDto>
+    ) : LoginResponseDto
 
 //    /** 임시 비밀번호 이메일 전송 */
 //    @POST("password")
@@ -35,94 +35,94 @@ interface RespalApi {
 
     /** 계정찾기 */
     @POST("password")
-    fun findAccount(
+    suspend fun findAccount(
         @Body requestBody: RequestBody
-    ) : Single<FindAccountResponseDto>
+    ) : FindAccountResponseDto
 
     /** 비밀번호 재설정 */
     @PATCH("password")
-    fun changePassword(
+    suspend fun changePassword(
         @Body requestBody: RequestBody
-    ) : Single<ResponseBody>
+    ) : ResponseBody
 
     /** 로그아웃 */
     @POST("member/logout")
-    fun logout() : Single<ResponseBody>
+    suspend fun logout() : ResponseBody
 
     /** OAuth 로그인 */
     @GET("oauth/app/login/{provider}")
-    fun oauthLogin(
+    suspend fun oauthLogin(
         @Path("provider") provider: String,
         @Query("code") code: String
-    ) : Single<ResponseBody>
+    ) : ResponseBody
 
     /** Oauth 정보를 서버로 보내 이미 회원인지 아닌지 판별 */
     @GET("oauth/user/{uid}")
-    fun requestOauthInfo(
+    suspend fun requestOauthInfo(
         @Path("uid") uid: String,
         @Query("type") type: String
-    ) : Single<ResponseBody>
+    ) : ResponseBody
 
     /** 멘션시 필요한 사용자 검색 */
     @GET("members")
-    fun searchMembers(
+    suspend fun searchMembers(
         @Query("searchWord") searchWord: String,
         @Query("limit") limit: Int
-    ) : Single<ResponseBody>
+    ) : ResponseBody
 
     /** 태그 제거*/
     @POST("tag/{tagId}")
-    fun deleteTag(
+    suspend fun deleteTag(
         @Path("tagId") tagId: String
-    ) : Single<ResponseBody>
+    ) : ResponseBody
 
     /** 태그 생성 */
     @POST("tag/{resumeId}")
-    fun createTag(
+    suspend fun createTag(
         @Path("resumeId") resumeId: String
-    ) : Single<ResponseBody>
+    ) : ResponseBody
 
     /** ME 이력서 조회 */
     @GET("resume?type=me")
-    fun findMyResume() : Single<JsonObject>
+     fun findMyResume() : ResponseBody
 
     /** HUB 이력서 조회 */
     @GET("resume?type=hub")
-    fun findHubResume() : Single<JsonObject>
+     fun findHubResume() : JsonObject
 
     /** TAG 이력서 조회 */
     @GET("resume?type=tag")
-    fun findTagResume() : Single<JsonObject>
+    suspend fun findTagResume() : JsonObject
 
     /** 이력서 생성 */
     @POST("resume")
-    fun createResume() : Single<ResponseBody>
+    suspend fun createResume() : ResponseBody
 
     /** 이력서 파일 저장 */
     @POST("resume/file")
-    fun saveResumeFile() : Single<ResponseBody>
+    suspend fun saveResumeFile() : ResponseBody
 
     /** 이력서 파일 삭제 */
     @HTTP(method = "DELETE", path = "resume/file", hasBody = true)
-    fun deleteResumeFile() : Single<ResponseBody>
+    suspend fun deleteResumeFile() : ResponseBody
 
     /** 이력서 상세 조회 */
     @GET("resume/{resumeId}")
-    fun getDetailResume() : Single<ResponseBody>
+    suspend fun getDetailResume() : ResponseBody
 
     /** 이력서 삭제 */
     @HTTP(method = "DELETE", path = "resume/{resumeId}", hasBody = true)
-    fun deleteResume() : Single<ResponseBody>
+    suspend fun deleteResume() : ResponseBody
 
     /** 댓글 조회 */
     @GET("comment/{resumeId}")
-    fun getComment() : Single<ResponseBody>
+    suspend fun getComment() : ResponseBody
 
     /** 댓글 생성 */
     @POST("comment/{resumeId}")
-    fun createComment() : Single<ResponseBody>
+    suspend fun createComment() : ResponseBody
 
     /** 댓글 삭제 */
     @HTTP(method = "DELETE", path = "comment/{commentId}", hasBody = true)
-    fun deleteComment() : Single<ResponseBody>
+    suspend fun deleteComment() : ResponseBody
 }
