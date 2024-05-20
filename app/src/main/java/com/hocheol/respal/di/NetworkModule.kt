@@ -1,6 +1,6 @@
 package com.hocheol.respal.di
 
-import com.hocheol.respal.data.local.SharedPreferenceStorage
+import com.hocheol.respal.data.local.DataStoreStorage
 import com.hocheol.respal.data.remote.api.RespalApi
 import com.hocheol.respal.data.remote.api.TokenAuthenticator
 import com.hocheol.respal.widget.utils.Constants.BASE_URL
@@ -9,12 +9,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.SecureRandom
 import java.security.cert.X509Certificate
@@ -31,21 +31,21 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideHttpClient(
-        sharedPreferenceStorage: SharedPreferenceStorage
+        dataStoreStorage: DataStoreStorage
     ): OkHttpClient {
         val interceptor = Interceptor { chain ->
             val originalRequest = chain.request()
             val requestBuilder: Request.Builder = originalRequest.newBuilder()
-            val accessToken = sharedPreferenceStorage.getAccessToken()
             requestBuilder.addHeader("accept", "application/json")
             requestBuilder.addHeader("content-type", "application/json")
+            val accessToken = runBlocking { dataStoreStorage.getAccessToken() }
             if (!accessToken.isNullOrBlank()) {
                 requestBuilder.addHeader("Authorization", "Bearer $accessToken")
             }
             val request = requestBuilder.build()
             chain.proceed(request)
         }
-        val tokenAuthenticator = provideTokenAuthenticator(sharedPreferenceStorage)
+        val tokenAuthenticator = provideTokenAuthenticator(dataStoreStorage)
 
         return OkHttpClient.Builder()
             .readTimeout(10, TimeUnit.SECONDS)
@@ -94,9 +94,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideTokenAuthenticator(
-        sharedPreferenceStorage: SharedPreferenceStorage
+        dataStoreStorage: DataStoreStorage
     ): TokenAuthenticator {
-        return TokenAuthenticator(sharedPreferenceStorage)
+        return TokenAuthenticator(dataStoreStorage)
     }
 
     @Provides

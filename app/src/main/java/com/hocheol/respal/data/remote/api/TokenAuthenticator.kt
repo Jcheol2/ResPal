@@ -1,7 +1,7 @@
 package com.hocheol.respal.data.remote.api
 
 import android.util.Log
-import com.hocheol.respal.data.local.SharedPreferenceStorage
+import com.hocheol.respal.data.local.DataStoreStorage
 import com.hocheol.respal.widget.utils.Constants.BASE_URL
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class TokenAuthenticator @Inject constructor(
     // 주입 순서 때문에 MainRepository 넣을 경우 에러 발생
     /*private val mainRepository: MainRepository,*/
-    private val sharedPreferenceStorage: SharedPreferenceStorage
+    private val dataStoreStorage: DataStoreStorage
 ) : Authenticator {
     private val TAG = this.javaClass.simpleName
     private var isRefreshingToken = false
@@ -27,7 +27,7 @@ class TokenAuthenticator @Inject constructor(
 
         return if (fetchNewAccessToken()) {
             Log.d(TAG, "토큰 재발행 성공 !!")
-            val newAccessToken = sharedPreferenceStorage.getAccessToken()
+            val newAccessToken = runBlocking { dataStoreStorage.getAccessToken() }
             response.request.newBuilder()
                 .header("Authorization", "Bearer $newAccessToken")
                 .build()
@@ -40,7 +40,7 @@ class TokenAuthenticator @Inject constructor(
     private fun fetchNewAccessToken(): Boolean {
         return runBlocking {
             try {
-                val refreshToken = sharedPreferenceStorage.getRefreshToken()
+                val refreshToken = dataStoreStorage.getRefreshToken()
                 val client = OkHttpClient()
 
                 val request = Request.Builder()
@@ -56,7 +56,7 @@ class TokenAuthenticator @Inject constructor(
                         val jsonResponse = JSONObject(responseBody)
                         val result = jsonResponse.getJSONObject("result")
                         val newAccessToken = result.getString("accessToken")
-                        sharedPreferenceStorage.saveAccessToken(newAccessToken)
+                        dataStoreStorage.saveAccessToken(newAccessToken)
                         return@runBlocking true
                     }
                 } else {

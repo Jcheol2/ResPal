@@ -8,7 +8,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
-import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.repository.MainRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -21,8 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val mainRepository: MainRepository,
-    private val sharedPreferenceStorage: SharedPreferenceStorage
+    private val mainRepository: MainRepository
 ) : BaseViewModel() {
     private lateinit var supportFragmentManager: FragmentManager
 

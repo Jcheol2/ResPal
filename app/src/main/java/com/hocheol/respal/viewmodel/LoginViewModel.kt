@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LiveData
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
-import com.hocheol.respal.data.local.SharedPreferenceStorage
+import com.hocheol.respal.data.local.DataStoreStorage
 import com.hocheol.respal.data.local.model.UserInfo
 import com.hocheol.respal.data.remote.model.LoginResponseDto
 import com.hocheol.respal.repository.MainRepository
@@ -20,6 +20,7 @@ import com.hocheol.respal.widget.utils.toJsonRequestBody
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import javax.inject.Inject
@@ -27,14 +28,14 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val mainRepository: MainRepository,
-    private val sharedPreferenceStorage: SharedPreferenceStorage
+    private val dataStoreStorage: DataStoreStorage
 ) : BaseViewModel() {
     private val _responseEvent = SingleLiveEvent<Pair<String, Boolean>>()
     val responseEvent: LiveData<Pair<String, Boolean>> get() = _responseEvent
 
     fun commonLogin(inputEmail: String, inputPw: String) {
-        sharedPreferenceStorage.saveAccessToken("")
         coroutineScope.launch {
+            dataStoreStorage.saveAccessToken("")
             try {
                 val loginInput: HashMap<String, Any> = hashMapOf(
                     "email" to inputEmail,
@@ -45,9 +46,9 @@ class LoginViewModel @Inject constructor(
                     mainRepository.login(loginInput.toJsonRequestBody())
                 }
 
-                sharedPreferenceStorage.saveAccessToken(response.result.accessToken)
-                sharedPreferenceStorage.saveRefreshToken(response.result.refreshToken)
-                sharedPreferenceStorage.saveUserInfo(
+                dataStoreStorage.saveAccessToken(response.result.accessToken)
+                dataStoreStorage.saveRefreshToken(response.result.refreshToken)
+                dataStoreStorage.saveUserInfo(
                     UserInfo(
                         inputEmail,
                         inputPw,
@@ -69,7 +70,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun signInOauth(context: Context, platform: String) {
-        sharedPreferenceStorage.saveAccessToken("")
+        runBlocking { dataStoreStorage.saveAccessToken("") }
         val loginUrl: String
         val clientId: String
         val redirectUri: String

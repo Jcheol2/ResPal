@@ -3,7 +3,6 @@ package com.hocheol.respal.viewmodel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.hocheol.respal.base.BaseViewModel
-import com.hocheol.respal.data.local.SharedPreferenceStorage
 import com.hocheol.respal.data.remote.model.FindAccountResponseDto
 import com.hocheol.respal.repository.MainRepository
 import com.hocheol.respal.widget.utils.SingleLiveEvent
@@ -17,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FindAccountViewModel @Inject constructor(
-    private val mainRepository: MainRepository,
-    private val sharedPreferenceStorage: SharedPreferenceStorage
+    private val mainRepository: MainRepository
 ) : BaseViewModel() {
     private val _responseEvent = SingleLiveEvent<Pair<String, Boolean>>()
     val responseEvent: LiveData<Pair<String, Boolean>> get() = _responseEvent
