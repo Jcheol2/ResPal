@@ -17,8 +17,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FindAccountFragment : BaseFragment<FragmentFindAccountBinding>(R.layout.fragment_find_account) {
-    private val TAG = this.javaClass.simpleName
-
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<FindAccountViewModel>()
 

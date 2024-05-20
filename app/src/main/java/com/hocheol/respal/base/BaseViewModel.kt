@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 
 abstract class BaseViewModel : ViewModel() {
+    protected val TAG = this.javaClass.simpleName
+
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Log.e("**COROUTINE_EXCEPTION**", throwable.stackTrace.toString())
     }

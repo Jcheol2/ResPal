@@ -9,6 +9,8 @@ import androidx.databinding.ViewDataBinding
 
 abstract class BaseActivity<T : ViewDataBinding>(@LayoutRes private val layoutResId: Int) : AppCompatActivity() {
     protected lateinit var binding: T
+    protected val TAG = this.javaClass.simpleName
+
     private var waitTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {

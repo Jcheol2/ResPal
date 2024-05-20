@@ -19,8 +19,6 @@ class SettingsViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
-    private val TAG = this.javaClass.simpleName
-
     private val _responseEvent = SingleLiveEvent<Pair<String, Boolean>>()
     val responseEvent: LiveData<Pair<String, Boolean>> get() = _responseEvent
 

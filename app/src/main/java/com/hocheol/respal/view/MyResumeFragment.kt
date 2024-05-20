@@ -14,10 +14,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_my_resume) {
-    private val TAG = this.javaClass.simpleName
-
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<MyResumeViewModel>()
+
     private var btnState = "myCv"
 
     override fun init() {

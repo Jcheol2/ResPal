@@ -24,7 +24,6 @@ class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     private val sharedPreferenceStorage: SharedPreferenceStorage
 ) : BaseViewModel() {
-    private val TAG = this.javaClass.simpleName
     private lateinit var supportFragmentManager: FragmentManager
 
     private val _currentFragment = MutableLiveData<Fragment?>()
@@ -38,9 +37,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun openFragment(fragment: Fragment, data: JSONObject?, tag: String) {
-        Log.e("Test", "[openView] tag = $tag")
+        Log.e(TAG, "[openFragment] tag = $tag")
         if (data != null) {
-            Log.e("Test", "bundle set = $data")
+            Log.e(TAG, "bundle set = $data")
             val bundle = Bundle()
             bundle.putString("data", data.toString())
             fragment.arguments = bundle
@@ -54,9 +53,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun replaceFragment(fragment: Fragment, data: JSONObject?, tag: String) {
-        Log.e("Test", "[replaceFragment] tag = $tag")
+        Log.e(TAG, "[replaceFragment] tag = $tag")
         if (data != null) {
-            Log.e("Test", "bundle set = $data")
+            Log.e(TAG, "bundle set = $data")
             val bundle = Bundle()
             bundle.putString("data", data.toString())
             fragment.arguments = bundle
@@ -69,9 +68,9 @@ class MainViewModel @Inject constructor(
     }
 
     fun closeFragment(fragment: Fragment) {
-        Log.e("Test", "[closeFragment] tag = " + fragment.tag)
+        Log.e(TAG, "[closeFragment] tag = " + fragment.tag)
         val list = supportFragmentManager.fragments
-        Log.e("Test", "fragments list = " + list.size)
+        Log.e(TAG, "fragments list = " + list.size)
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.beginTransaction()
                 .remove(fragment)
@@ -80,7 +79,7 @@ class MainViewModel @Inject constructor(
         // 프래그먼트를 닫으면 _fragmentToReplace의 값을 이전 프래그먼트로 설정
         val indexOfRemovedFragment = list.indexOf(fragment)
         val previousFragment = if (indexOfRemovedFragment > 0) list[indexOfRemovedFragment - 1] else null
-        Log.e("Test", "[closeFragment] previousFragment  = $previousFragment")
+        Log.e(TAG, "[closeFragment] previousFragment  = $previousFragment")
         _currentFragment.postValue(previousFragment)
     }
 
@@ -100,7 +99,7 @@ class MainViewModel @Inject constructor(
                         throw e
                     }
                 }
-                Log.d("정철", response.toString())
+                Log.d("TEST", response.toString())
 //                sharedPreferenceStorage.saveUserInfo(
 //                    UserInfo(
 //                        response.result.userInfo.email,

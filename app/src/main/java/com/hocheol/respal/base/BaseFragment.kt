@@ -15,6 +15,7 @@ abstract class BaseFragment<B : ViewDataBinding>(
 ) : Fragment() {
     val binding get() = _binding!!
     private var _binding: B? = null
+    protected val TAG = this.javaClass.simpleName
 
     override fun onCreateView(
         inflater: LayoutInflater,

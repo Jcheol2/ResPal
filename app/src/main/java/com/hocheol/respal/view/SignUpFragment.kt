@@ -15,8 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragment<FragmentSignUpBinding>(R.layout.fragment_sign_up) {
-    private val TAG = this.javaClass.simpleName
-
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<SignUpViewModel>()
 

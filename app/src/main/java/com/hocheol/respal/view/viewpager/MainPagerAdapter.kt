@@ -1,8 +1,11 @@
-package com.hocheol.respal.view
+package com.hocheol.respal.view.viewpager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.hocheol.respal.view.ActivityFragment
+import com.hocheol.respal.view.MyResumeFragment
+import com.hocheol.respal.view.SettingsFragment
 
 class MainPagerAdapter(fragmentManager: FragmentManager) :
     FragmentPagerAdapter(

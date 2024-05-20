@@ -13,8 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SettingsFragment: BaseFragment<FragmentSettingsBinding>(R.layout.fragment_settings) {
-    private val TAG = this.javaClass.simpleName
-
     private val mainViewModel by activityViewModels<MainViewModel>()
     private val viewModel by viewModels<SettingsViewModel>()
 

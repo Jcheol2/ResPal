@@ -1,4 +1,4 @@
-package com.hocheol.respal.view
+package com.hocheol.respal.view.viewpager
 
 import androidx.fragment.app.activityViewModels
 import androidx.viewpager.widget.ViewPager
@@ -10,8 +10,6 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ViewPagerFragment : BaseFragment<FragmentViewPagerBinding>(R.layout.fragment_view_pager) {
-    private val TAG = this.javaClass.simpleName
-
     private val mainViewModel by activityViewModels<MainViewModel>()
 
     override fun init() {
