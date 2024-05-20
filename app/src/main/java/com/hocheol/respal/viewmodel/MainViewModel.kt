@@ -9,6 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import com.hocheol.respal.R
 import com.hocheol.respal.base.BaseViewModel
 import com.hocheol.respal.repository.MainRepository
+import com.hocheol.respal.widget.utils.Constants.ACTIVITY_FRAGMENT_TAG
+import com.hocheol.respal.widget.utils.Constants.MY_RESUME_FRAGMENT_TAG
+import com.hocheol.respal.widget.utils.Constants.SETTINGS_FRAGMENT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,8 +27,8 @@ class MainViewModel @Inject constructor(
 ) : BaseViewModel() {
     private lateinit var supportFragmentManager: FragmentManager
 
-    private val _currentFragment = MutableLiveData<Fragment?>()
-    val currentFragment: LiveData<Fragment?> = _currentFragment
+    private val _currentFragmentTag = MutableLiveData<String?>()
+    val currentFragmentTag: LiveData<String?> = _currentFragmentTag
 
     private val _currentViewPagerPosition = MutableLiveData<Int>()
     val currentViewPagerPosition: LiveData<Int> = _currentViewPagerPosition
@@ -35,9 +38,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun openFragment(fragment: Fragment, data: JSONObject?, tag: String) {
-        Log.e(TAG, "[openFragment] tag = $tag")
         if (data != null) {
-            Log.e(TAG, "bundle set = $data")
             val bundle = Bundle()
             bundle.putString("data", data.toString())
             fragment.arguments = bundle
@@ -47,13 +48,11 @@ class MainViewModel @Inject constructor(
             .add(R.id.frame_layout, fragment, tag)
             .addToBackStack(null)
             .commitAllowingStateLoss()
-        _currentFragment.postValue(fragment)
+        setCurrentFragmentTag(tag)
     }
 
     fun replaceFragment(fragment: Fragment, data: JSONObject?, tag: String) {
-        Log.e(TAG, "[replaceFragment] tag = $tag")
         if (data != null) {
-            Log.e(TAG, "bundle set = $data")
             val bundle = Bundle()
             bundle.putString("data", data.toString())
             fragment.arguments = bundle
@@ -62,26 +61,39 @@ class MainViewModel @Inject constructor(
             .beginTransaction()
             .replace(R.id.frame_layout, fragment, tag)
             .commitAllowingStateLoss()
-        _currentFragment.postValue(fragment)
+        setCurrentFragmentTag(tag)
     }
 
     fun closeFragment(fragment: Fragment) {
-        Log.e(TAG, "[closeFragment] tag = " + fragment.tag)
         val list = supportFragmentManager.fragments
-        Log.e(TAG, "fragments list = " + list.size)
         if (supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.beginTransaction()
                 .remove(fragment)
                 .commitAllowingStateLoss()
         }
-        // 프래그먼트를 닫으면 _fragmentToReplace의 값을 이전 프래그먼트로 설정
+        // 프래그먼트를 닫으면 _currentFragmentTag의 값을 이전 프래그먼트로 설정
         val indexOfRemovedFragment = list.indexOf(fragment)
         val previousFragment = if (indexOfRemovedFragment > 0) list[indexOfRemovedFragment - 1] else null
         Log.e(TAG, "[closeFragment] previousFragment  = $previousFragment")
-        _currentFragment.postValue(previousFragment)
+        setCurrentFragmentTag(previousFragment?.tag)
+    }
+
+    private fun setCurrentFragmentTag(currentFragmentTag: String?) {
+        _currentFragmentTag.postValue(currentFragmentTag)
     }
 
     fun onPageSelected(position: Int) {
+        when(position) {
+            0 -> {
+                setCurrentFragmentTag(MY_RESUME_FRAGMENT_TAG)
+            }
+            1 -> {
+                setCurrentFragmentTag(ACTIVITY_FRAGMENT_TAG)
+            }
+            2 -> {
+                setCurrentFragmentTag(SETTINGS_FRAGMENT)
+            }
+        }
         _currentViewPagerPosition.postValue(position)
     }
 

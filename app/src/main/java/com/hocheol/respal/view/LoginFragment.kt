@@ -12,8 +12,8 @@ import com.hocheol.respal.widget.utils.Constants.FIND_ACCOUNT_FRAGMENT_TAG
 import com.hocheol.respal.widget.utils.Constants.GITHUB
 import com.hocheol.respal.widget.utils.Constants.GOOGLE
 import com.hocheol.respal.widget.utils.Constants.KAKAO
+import com.hocheol.respal.widget.utils.Constants.MY_RESUME_FRAGMENT_TAG
 import com.hocheol.respal.widget.utils.Constants.SIGN_UP_FRAGMENT_TAG
-import com.hocheol.respal.widget.utils.Constants.VIEW_PAGER_FRAGMENT_TAG
 import com.hocheol.respal.widget.utils.setOnSingleClickListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -57,7 +57,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 "commonLogin" -> {
                     if (success.second) {
                         shortShowToast("Login Success")
-                        mainViewModel.replaceFragment(ViewPagerFragment(), null, VIEW_PAGER_FRAGMENT_TAG)
+                        mainViewModel.replaceFragment(ViewPagerFragment(), null, MY_RESUME_FRAGMENT_TAG)
                     } else {
                         shortShowToast("Login Failed")
                     }

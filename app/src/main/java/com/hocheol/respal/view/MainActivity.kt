@@ -24,9 +24,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         mainViewModel.openFragment(LoginFragment(), null, LOGIN_FRAGMENT_TAG)
         handleIntent(intent)
 
-        mainViewModel.currentFragment.observe(this) { currentFragment ->
-            if (currentFragment == null) return@observe
-            if (currentFragment.tag!!.contains("LOGIN")) {
+        mainViewModel.currentFragmentTag.observe(this) { currentFragmentTag ->
+            if (currentFragmentTag == null) return@observe
+            Log.e(TAG, "Current Fragment : $currentFragmentTag")
+            if (currentFragmentTag.contains("LOGIN")) {
                 binding.toolbarView.visibility = View.GONE
                 binding.bottomNavView.visibility = View.GONE
             } else {
