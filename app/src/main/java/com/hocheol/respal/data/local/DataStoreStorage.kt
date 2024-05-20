@@ -3,6 +3,7 @@ package com.hocheol.respal.data.local
 import android.content.Context
 import android.util.Log
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
@@ -29,7 +30,7 @@ class DataStoreStorage @Inject constructor(private val context: Context) {
         return context.dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
-                    null
+                    emit(emptyPreferences())
                 } else {
                     throw exception
                 }
