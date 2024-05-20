@@ -33,25 +33,15 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
             }
             binding.profileUserNameText.text = nickname
         }
-        binding.editProfileBtn
+        binding.editProfileBtn.setOnSingleClickListener {
+            // TODO
+        }
         binding.myCvBtn.setOnSingleClickListener {
             viewModel.findResume()
-            if (btnState != "myCv") {
-                binding.myCvBtn.setTextColor(resources.getColor(R.color.color_white))
-                binding.myCvBtn.setBackgroundResource(R.drawable.background_button_6d4acd)
-                binding.mentionedBtn.setTextColor(resources.getColor(R.color.color_3B3B3B))
-                binding.mentionedBtn.background = null
-                btnState = "myCv"
-            }
+            changeButtonRes("myCv")
         }
         binding.mentionedBtn.setOnSingleClickListener {
-            if (btnState != "mentioned") {
-                binding.mentionedBtn.setTextColor(resources.getColor(R.color.color_white))
-                binding.mentionedBtn.setBackgroundResource(R.drawable.background_button_6d4acd)
-                binding.myCvBtn.setTextColor(resources.getColor(R.color.color_3B3B3B))
-                binding.myCvBtn.background = null
-                btnState = "mentioned"
-            }
+            changeButtonRes("mentioned")
         }
         binding.cvRecyclerView // TODO
         initObserve()
@@ -69,5 +59,21 @@ class MyResumeFragment: BaseFragment<FragmentMyResumeBinding>(R.layout.fragment_
                 }
             }
         }
+    }
+
+    private fun changeButtonRes(content: String) {
+        if (content == btnState) return
+        if (content == "myCv") {
+            binding.myCvBtn.setTextColor(resources.getColor(R.color.color_white))
+            binding.myCvBtn.setBackgroundResource(R.drawable.background_button_6d4acd)
+            binding.mentionedBtn.setTextColor(resources.getColor(R.color.color_3B3B3B))
+            binding.mentionedBtn.background = null
+        } else if (content == "mentioned"){
+            binding.mentionedBtn.setTextColor(resources.getColor(R.color.color_white))
+            binding.mentionedBtn.setBackgroundResource(R.drawable.background_button_6d4acd)
+            binding.myCvBtn.setTextColor(resources.getColor(R.color.color_3B3B3B))
+            binding.myCvBtn.background = null
+        }
+        btnState = content
     }
 }
