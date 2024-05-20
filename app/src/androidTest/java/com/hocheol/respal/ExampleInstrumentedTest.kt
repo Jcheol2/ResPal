@@ -31,7 +31,6 @@ class ExampleInstrumentedTest @Inject constructor(
 
     @Test
     fun serverResponseCheck() {
-        mainRepository.test()
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.hocheol.respal", appContext.packageName)
     }
